@@ -1,10 +1,12 @@
-[gd_scene load_steps=6 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=7 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="Script" uid="uid://cevkiaea4t2gp" path="res://PlayerController.gd" id="1_wbfu4"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6ubv3"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_wbfu4"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_wbfu4"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_xkndl"]
 
@@ -23,10 +25,16 @@ shape = SubResource("CapsuleShape3D_6ubv3")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
 mesh = SubResource("CapsuleMesh_wbfu4")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 24.678154, 24.354477)
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 0.5, 0, 0.4619131, 0.37946033)
+mesh = SubResource("BoxMesh_wbfu4")
+
+[node name="CameraRig" type="Node3D" parent="CharacterBody3D"]
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraRig"]
+transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, -22, 32, 22)
 projection = 1
-size = 30.0
+size = 20.259
 
 [node name="Ground" type="MeshInstance3D" parent="."]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
