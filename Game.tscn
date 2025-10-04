@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://c8f2x3y405a6b" path="res://enemies/enemy.tscn" id="2_enemy"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
 [ext_resource type="PackedScene" uid="uid://t41ooe4hvgai" path="res://enemies/enemy_lurcher.tscn" id="4_sb48q"]
-[ext_resource type="PackedScene" path="res://enemies/enemy_floater.tscn" id="5_t88pq"]
+[ext_resource type="PackedScene" uid="uid://b885s7bvrq8ce" path="res://enemies/enemy_floater.tscn" id="5_t88pq"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
 [ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/player_magic.tscn" id="9_2vekm"]
 
@@ -65,7 +65,6 @@ collision_layer = 4
 
 [node name="EnemyFloater" parent="." instance=ExtResource("5_t88pq")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.678227, 0.542294, 7.2913723)
-collision_layer = 8
 
 [node name="StreetLights" type="Node3D" parent="."]
 
@@ -383,3 +382,21 @@ omni_range = 12.0
 
 [node name="AtmosphericGhosts" parent="StreetLights" instance=ExtResource("7_3mrqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.212414, 2.4837408, 30.75861)
+
+[node name="Enemy2" parent="." instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.773554, 1.042294, -9.6736555)
+
+[node name="Enemy3" parent="." instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.57563, 1.0422921, -12.7983055)
+
+[node name="Enemy4" parent="." instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.549337, 1.042294, -11.546138)
+
+[node name="EnemyFloater2" parent="." instance=ExtResource("5_t88pq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6632757, 0.5422921, 8.705445)
+
+[node name="EnemyFloater3" parent="." instance=ExtResource("5_t88pq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9617343, 0.542294, 6.276825)
+
+[node name="EnemyFloater4" parent="." instance=ExtResource("5_t88pq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5414817, 0.5422921, 7.270065)

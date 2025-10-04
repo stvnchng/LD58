@@ -10,6 +10,9 @@ class_name EnemyFloater
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 
+# Targeting modes for more natural pathfinding
+enum TargetMode { PREDICT, CURRENT, PAST }
+
 var player: Player = null
 var orbit_angle: float = 0.0  # Current angle around the player
 var orbit_direction: float = 1.0  # 1 for clockwise, -1 for counter-clockwise
@@ -17,11 +20,22 @@ var oscillation_time: float = 0.0  # Timer for distance oscillation
 var oscillation_speed: float = 3.0  # How fast to oscillate in/out
 var oscillation_amplitude: float = 2.0  # How much to oscillate (distance variance)
 
+# Smart targeting variables
+var target_mode: TargetMode = TargetMode.CURRENT
+var mode_switch_timer: float = 0.0
+var next_mode_switch_time: float = 0.0
+var player_position_history: Array[Vector3] = []
+var history_sample_time: float = 0.0
+var history_duration: float = 1.0  # Track position from 1 second ago
+
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
 	call_deferred("actor_setup")
 	# Randomize initial orbit direction
 	orbit_direction = 1.0 if randf() > 0.5 else -1.0
+	# Initialize targeting mode
+	pick_random_target_mode()
+	next_mode_switch_time = randf_range(5.0, 10.0)
 
 func actor_setup():
 	await get_tree().physics_frame
@@ -34,8 +48,21 @@ func set_movement_target(movement_target: Vector3):
 func _physics_process(delta):
 	if not player:
 		return
+	
+	# Update player position history
+	update_player_history(delta)
+	
+	# Update target mode switching timer
+	mode_switch_timer += delta
+	if mode_switch_timer >= next_mode_switch_time:
+		pick_random_target_mode()
+		mode_switch_timer = 0.0
+		next_mode_switch_time = randf_range(5.0, 10.0)
+	
+	# Get the target position based on current mode
+	var target_position = get_target_position()
 
-	var distance_to_player = global_position.distance_to(player.global_position)
+	var distance_to_player = global_position.distance_to(target_position)
 	
 	# Update oscillation timer
 	oscillation_time += delta * oscillation_speed
@@ -43,7 +70,7 @@ func _physics_process(delta):
 	# Determine behavior based on distance
 	if distance_to_player > max_distance:
 		# Too far - move toward player using navigation
-		approach_player(delta)
+		approach_player(delta, target_position)
 	elif distance_to_player < min_distance:
 		# Too close - back away from player
 		retreat_from_player(delta)
@@ -61,8 +88,8 @@ func _physics_process(delta):
 	velocity.y = 0
 	move_and_slide()
 
-func approach_player(delta):
-	set_movement_target(player.global_position)
+func approach_player(delta, target_pos: Vector3):
+	set_movement_target(target_pos)
 	
 	if navigation_agent.is_navigation_finished():
 		return
@@ -130,3 +157,45 @@ func orbit_player(delta, distance_to_player):
 	if randf() < 0.3 * delta:  # Small chance each frame
 		orbit_direction *= -1.0
 
+func update_player_history(delta: float):
+	if not player:
+		return
+	
+	# Sample player position every frame
+	history_sample_time += delta
+	player_position_history.append(player.global_position)
+	
+	# Keep only positions from the last second
+	var samples_to_keep = int(history_duration / delta) if delta > 0 else 60
+	if player_position_history.size() > samples_to_keep:
+		player_position_history.pop_front()
+
+func get_target_position() -> Vector3:
+	if not player:
+		return global_position
+	
+	match target_mode:
+		TargetMode.PREDICT:
+			# Predict where player will be based on their velocity
+			var prediction_time = 0.5  # Predict 0.5 seconds ahead
+			var predicted_pos = player.global_position + player.velocity * prediction_time
+			predicted_pos.y = player.global_position.y  # Keep on ground level
+			return predicted_pos
+		
+		TargetMode.CURRENT:
+			# Target player's current position
+			return player.global_position
+		
+		TargetMode.PAST:
+			# Target where player was 1 second ago
+			if player_position_history.size() > 0:
+				return player_position_history[0]
+			else:
+				return player.global_position
+		
+		_:
+			return player.global_position
+
+func pick_random_target_mode():
+	var modes = [TargetMode.PREDICT, TargetMode.CURRENT, TargetMode.PAST]
+	target_mode = modes[randi() % modes.size()]
