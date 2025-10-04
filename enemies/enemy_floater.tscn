@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://enemies/enemy_floater.gd" id="1_floater"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_floater"]
+radius = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_floater"]
+radius = 0.5
+height = 1.0
+
+[sub_resource type="BoxMesh" id="BoxMesh_floater_eye"]
+
+[node name="EnemyFloater" type="CharacterBody3D"]
+script = ExtResource("1_floater")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_floater")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_floater")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="Eye" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.15, 0, 0, 0, 0.15, 0, 0, 0, 0.3, 0, 0, 0.4)
+mesh = SubResource("BoxMesh_floater_eye")
+

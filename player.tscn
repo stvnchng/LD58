@@ -22,9 +22,28 @@ mesh = SubResource("CapsuleMesh_wbfu4")
 transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 0.5, 0, 0.4619131, 0.37946033)
 mesh = SubResource("BoxMesh_wbfu4")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.02286, 0)
+visible = false
+light_color = Color(0.972549, 0.921569, 1, 1)
+light_energy = 8.386
+light_volumetric_fog_energy = 9.165
+light_size = 1.0
+light_specular = 0.0
+distance_fade_enabled = true
+distance_fade_begin = 66.6
+omni_range = 20.0
+omni_attenuation = 1.441
+
 [node name="CameraRig" type="Node3D" parent="."]
 
 [node name="Camera3D" type="Camera3D" parent="CameraRig"]
 transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, -22, 32, 22)
 projection = 1
 size = 20.259
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 12, 0)
+light_energy = 5.0
+spot_range = 24.026943
+spot_angle = 56.80418
