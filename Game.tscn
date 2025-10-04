@@ -1,12 +1,10 @@
-[gd_scene load_steps=10 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=8 format=3 uid="uid://cklphenhukdfx"]
 
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://player.tscn" id="1_wbfu4"]
-[ext_resource type="PackedScene" uid="uid://c8f2x3y405a6b" path="res://enemies/enemy.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://entities/player/player.tscn" id="1_wbfu4"]
+[ext_resource type="PackedScene" uid="uid://c8f2x3y405a6b" path="res://entities/enemies/enemy.tscn" id="2_enemy"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
-[ext_resource type="PackedScene" uid="uid://t41ooe4hvgai" path="res://enemies/enemy_lurcher.tscn" id="4_sb48q"]
-[ext_resource type="PackedScene" uid="uid://b885s7bvrq8ce" path="res://enemies/enemy_floater.tscn" id="5_t88pq"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
-[ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/player_magic.tscn" id="9_2vekm"]
+[ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/PlayerBullet.tscn" id="9_2vekm"]
 
 [sub_resource type="Environment" id="Environment_spooky"]
 background_mode = 1
@@ -42,7 +40,6 @@ projectile_scene = ExtResource("9_2vekm")
 
 [node name="Enemy" parent="." instance=ExtResource("2_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.055325, 1, -10)
-collision_layer = 2
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_spooky")
@@ -58,13 +55,6 @@ navigation_mesh = SubResource("NavigationMesh_joorw")
 
 [node name="Map" parent="NavigationRegion3D" instance=ExtResource("3_u44n3")]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, -2, 0)
-
-[node name="EnemyLurcher" parent="." instance=ExtResource("4_sb48q")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 35.042305, 1.0422921, 8.528412)
-collision_layer = 4
-
-[node name="EnemyFloater" parent="." instance=ExtResource("5_t88pq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.678227, 0.542294, 7.2913723)
 
 [node name="StreetLights" type="Node3D" parent="."]
 
@@ -391,12 +381,3 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.57563, 1.0422921, -12.7983
 
 [node name="Enemy4" parent="." instance=ExtResource("2_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.549337, 1.042294, -11.546138)
-
-[node name="EnemyFloater2" parent="." instance=ExtResource("5_t88pq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.6632757, 0.5422921, 8.705445)
-
-[node name="EnemyFloater3" parent="." instance=ExtResource("5_t88pq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.9617343, 0.542294, 6.276825)
-
-[node name="EnemyFloater4" parent="." instance=ExtResource("5_t88pq")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5414817, 0.5422921, 7.270065)

@@ -1,0 +1,51 @@
+[gd_scene load_steps=5 format=3 uid="uid://cxlk03l7oen6n"]
+
+[ext_resource type="Script" uid="uid://dyfgtsurmiafc" path="res://entities/components/HpBar.gd" id="1_fscdw"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_fscdw"]
+viewport_path = NodePath("SubViewport")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fscdw"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.28851813, 0.28851795, 0.28851792, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5qotq"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+bg_color = Color(0.74242955, 0.07209966, 1.92523e-07, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 6
+
+[node name="HpBar" type="Sprite3D"]
+billboard = 1
+no_depth_test = true
+texture = SubResource("ViewportTexture_fscdw")
+script = ExtResource("1_fscdw")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(150, 25)
+
+[node name="ProgressBar" type="ProgressBar" parent="SubViewport"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_fscdw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_5qotq")
+value = 50.0
+show_percentage = false
