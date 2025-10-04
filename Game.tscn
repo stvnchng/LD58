@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=9 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://entities/player/player.tscn" id="1_wbfu4"]
 [ext_resource type="PackedScene" uid="uid://c8f2x3y405a6b" path="res://entities/enemies/enemy.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" path="res://objects/projectiles/PlayerBullet.tscn" id="2_r0x5m"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
+[ext_resource type="Script" uid="uid://bxhc6ng40go1d" path="res://spawn_director.gd" id="5_t88pq"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
-[ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/PlayerBullet.tscn" id="9_2vekm"]
 
 [sub_resource type="Environment" id="Environment_spooky"]
 background_mode = 1
@@ -36,7 +37,7 @@ agent_max_climb = 0.0
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_wbfu4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.28726, 1, 8.333862)
-projectile_scene = ExtResource("9_2vekm")
+projectile_scene = ExtResource("2_r0x5m")
 
 [node name="Enemy" parent="." instance=ExtResource("2_enemy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.055325, 1, -10)
@@ -373,11 +374,34 @@ omni_range = 12.0
 [node name="AtmosphericGhosts" parent="StreetLights" instance=ExtResource("7_3mrqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.212414, 2.4837408, 30.75861)
 
-[node name="Enemy2" parent="." instance=ExtResource("2_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.773554, 1.042294, -9.6736555)
+[node name="SpawnDirector" type="Node" parent="."]
+script = ExtResource("5_t88pq")
 
-[node name="Enemy3" parent="." instance=ExtResource("2_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.57563, 1.0422921, -12.7983055)
+[node name="Spawns" type="Node" parent="."]
 
-[node name="Enemy4" parent="." instance=ExtResource("2_enemy")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.549337, 1.042294, -11.546138)
+[node name="Spawn" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.820194, 1, -40.10872)
+
+[node name="Spawn2" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.205029, 1, -40.10872)
+
+[node name="Spawn3" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.6611, 1, -40.10872)
+
+[node name="Spawn4" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.831059, 1, 8.133293)
+
+[node name="Center" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.307735, 1, 8.133293)
+
+[node name="Spawn6" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.601536, 1, 8.133293)
+
+[node name="Spawn7" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.606026, 1, 54.62667)
+
+[node name="Spawn8" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3275, 1, 54.62667)
+
+[node name="Spawn9" type="Node3D" parent="Spawns"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.958107, 1, 54.62667)

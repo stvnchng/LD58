@@ -3,7 +3,7 @@ class_name Player
 
 @export var speed: float = 5.0
 @export var rotation_speed: float = 10.0
-@export var projectile_scene: PackedScene  # Drag player_magic.tscn here
+@export var projectile_scene: PackedScene
 @export var fire_rate: float = 0.3  # Seconds between shots
 
 @onready var camera_rig = $CameraRig

@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://b885s7bvrq8ce"]
 
-[ext_resource type="Script" uid="uid://k26mwwgtuaqp" path="res://enemies/enemy_floater.gd" id="1_floater"]
+[ext_resource type="Script" uid="uid://c6ohm78mq36x6" path="res://entities/enemies/enemy_floater.gd" id="1_floater"]
 [ext_resource type="Texture2D" uid="uid://c8ww70xlt6mhu" path="res://assets/enemy_meshes/GHOST_Untitled.png" id="2_vh0at"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3uqe"]
