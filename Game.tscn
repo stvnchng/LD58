@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://cklphenhukdfx"]
+
+[ext_resource type="Script" uid="uid://cevkiaea4t2gp" path="res://PlayerController.gd" id="1_wbfu4"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6ubv3"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_wbfu4"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xkndl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wbfu4"]
+
+[node name="Main" type="Node3D"]
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+up_direction = Vector3(0, 0.9999998, 0.0006666666)
+script = ExtResource("1_wbfu4")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+shape = SubResource("CapsuleShape3D_6ubv3")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("CapsuleMesh_wbfu4")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 24.678154, 24.354477)
+projection = 1
+size = 30.0
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("PlaneMesh_xkndl")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
+shape = SubResource("BoxShape3D_wbfu4")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
