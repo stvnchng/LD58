@@ -1,50 +1,36 @@
-[gd_scene load_steps=7 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=6 format=3 uid="uid://cklphenhukdfx"]
 
-[ext_resource type="Script" uid="uid://cevkiaea4t2gp" path="res://PlayerController.gd" id="1_wbfu4"]
+[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://player.tscn" id="1_wbfu4"]
+[ext_resource type="PackedScene" uid="uid://c8f2x3y4z5a6b" path="res://enemies/enemy.tscn" id="2_enemy"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6ubv3"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_wbfu4"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_wbfu4"]
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_xkndl"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_wbfu4"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_xkndl"]
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_wbfu4"]
+[sub_resource type="NavigationMesh" id="NavigationMesh_main"]
+vertices = PackedVector3Array(-20, 0, -20, 20, 0, -20, 20, 0, 20, -20, 0, 20)
+polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
 [node name="Main" type="Node3D"]
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
-up_direction = Vector3(0, 0.9999998, 0.0006666666)
-script = ExtResource("1_wbfu4")
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_main")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
-shape = SubResource("CapsuleShape3D_6ubv3")
+[node name="CharacterBody3D" parent="." instance=ExtResource("1_wbfu4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
-mesh = SubResource("CapsuleMesh_wbfu4")
-
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="CharacterBody3D"]
-transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 0.5, 0, 0.4619131, 0.37946033)
-mesh = SubResource("BoxMesh_wbfu4")
-
-[node name="CameraRig" type="Node3D" parent="CharacterBody3D"]
-
-[node name="Camera3D" type="Camera3D" parent="CharacterBody3D/CameraRig"]
-transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, -22, 32, 22)
-projection = 1
-size = 20.259
-
-[node name="Ground" type="MeshInstance3D" parent="."]
-transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
-mesh = SubResource("PlaneMesh_xkndl")
-
-[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
-transform = Transform3D(10, 0, 0, 0, 1, 0, 0, 0, 10, 0, 0, 0)
-shape = SubResource("BoxShape3D_wbfu4")
+[node name="Enemy" parent="." instance=ExtResource("2_enemy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -10)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 0)
+mesh = SubResource("PlaneMesh_wbfu4")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("WorldBoundaryShape3D_xkndl")
