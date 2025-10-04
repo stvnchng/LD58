@@ -1,20 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=13 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://player.tscn" id="1_wbfu4"]
-[ext_resource type="PackedScene" uid="uid://c8f2x3y4z5a6b" path="res://enemies/enemy.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" uid="uid://c8f2x3y405a6b" path="res://enemies/enemy.tscn" id="2_enemy"]
+[ext_resource type="PackedScene" uid="uid://yptjr5aeoxst" path="res://map/Decoration.tscn" id="3_r0x5m"]
+[ext_resource type="PackedScene" uid="uid://buyorqi77okpw" path="res://map/Houses.tscn" id="4_sb48q"]
+[ext_resource type="PackedScene" uid="uid://dy8wdj7mq3s13" path="res://map/Lights.tscn" id="5_3mrqo"]
+[ext_resource type="PackedScene" uid="uid://chibh2gn2l8pq" path="res://map/Trees.tscn" id="6_joorw"]
+[ext_resource type="PackedScene" uid="uid://dhuu7o0foxvtu" path="res://assets/map_meshes/GRASS.glb" id="7_joorw"]
+[ext_resource type="PackedScene" uid="uid://dyopmbb5tearh" path="res://assets/map_meshes/PATH.glb" id="8_2vekm"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_wbfu4"]
 
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_xkndl"]
 
-[sub_resource type="NavigationMesh" id="NavigationMesh_main"]
-vertices = PackedVector3Array(-20, 0, -20, 20, 0, -20, 20, 0, 20, -20, 0, 20)
+[sub_resource type="NavigationMesh" id="NavigationMesh_xkndl"]
+vertices = PackedVector3Array(-74.5, 0.5, -87, -74.5, 0.5, 87, 74.5, 0.5, 87, 74.5, 0.5, -87)
 polygons = [PackedInt32Array(3, 2, 0), PackedInt32Array(0, 2, 1)]
 
-[node name="Main" type="Node3D"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_u44n3"]
+size = Vector2(150, 175)
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
-navigation_mesh = SubResource("NavigationMesh_main")
+[node name="Main" type="Node3D"]
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_wbfu4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -34,3 +40,27 @@ transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 0, 0)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
 shape = SubResource("WorldBoundaryShape3D_xkndl")
+
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+navigation_mesh = SubResource("NavigationMesh_xkndl")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="NavigationRegion3D"]
+mesh = SubResource("PlaneMesh_u44n3")
+
+[node name="Grass" parent="." instance=ExtResource("7_joorw")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
+
+[node name="Path" parent="." instance=ExtResource("8_2vekm")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
+
+[node name="Decoration" parent="." instance=ExtResource("3_r0x5m")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
+
+[node name="Houses" parent="." instance=ExtResource("4_sb48q")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
+
+[node name="Lights" parent="." instance=ExtResource("5_3mrqo")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
+
+[node name="Trees" parent="." instance=ExtResource("6_joorw")]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, -19.883953, -2, -10.69619)
