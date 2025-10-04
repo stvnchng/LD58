@@ -3,16 +3,19 @@ class_name Enemy
 
 @export var speed: float = 3.0
 @export var acceleration: float = 10.0
-@export var player: Player
+
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 
+var player: Player = null
 
 func _ready():
+	player = get_tree().get_first_node_in_group("player")
 	call_deferred("actor_setup")
 
 func actor_setup():
 	await get_tree().physics_frame
 	if player:
+		print(player.global_position)
 		set_movement_target(player.global_position)
 
 func set_movement_target(movement_target: Vector3):
