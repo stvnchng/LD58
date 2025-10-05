@@ -11,9 +11,6 @@ class_name EnemyFloater
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
 
-# Targeting modes for more natural pathfinding
-enum TargetMode { PREDICT, CURRENT, PAST }
-
 var player: Player = null
 var orbit_angle: float = 0.0  # Current angle around the player
 var orbit_direction: float = 1.0  # 1 for clockwise, -1 for counter-clockwise
@@ -21,13 +18,18 @@ var oscillation_time: float = 0.0  # Timer for distance oscillation
 var oscillation_speed: float = 3.0  # How fast to oscillate in/out
 var oscillation_amplitude: float = 2.0  # How much to oscillate (distance variance)
 
-# Smart targeting variables
+enum TargetMode { PREDICT, CURRENT, PAST }
 var target_mode: TargetMode = TargetMode.CURRENT
 var mode_switch_timer: float = 0.0
 var next_mode_switch_time: float = 0.0
-var player_position_history: Array[Vector3] = []
-var history_sample_time: float = 0.0
-var history_duration: float = 1.0  # Track position from 1 second ago
+
+var history_size: int = 60
+var player_history: Array = []
+var history_index: int = 0
+
+var nav_update_timer: float = 0.0
+var nav_update_interval: float = 0.1
+
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -40,6 +42,10 @@ func _ready():
 	
 	health.died.connect(_on_died)
 	health.health_changed.connect(_on_health_changed)
+	
+	player_history.resize(history_size)
+	for i in range(history_size):
+		player_history[i] = Vector3.ZERO
 
 func actor_setup():
 	await get_tree().physics_frame
@@ -53,33 +59,25 @@ func _physics_process(delta):
 	if not player:
 		return
 	
-	# Update player position history
-	update_player_history(delta)
+	history_index = (history_index + 1) % history_size
+	player_history[history_index] = player.global_position
 	
-	# Update target mode switching timer
 	mode_switch_timer += delta
 	if mode_switch_timer >= next_mode_switch_time:
 		pick_random_target_mode()
 		mode_switch_timer = 0.0
 		next_mode_switch_time = randf_range(5.0, 10.0)
-	
-	# Get the target position based on current mode
+
 	var target_position = get_target_position()
 
 	var distance_to_player = global_position.distance_to(target_position)
 	
-	# Update oscillation timer
 	oscillation_time += delta * oscillation_speed
-	
-	# Determine behavior based on distance
 	if distance_to_player > max_distance:
-		# Too far - move toward player using navigation
 		approach_player(delta, target_position)
 	elif distance_to_player < min_distance:
-		# Too close - back away from player
 		retreat_from_player(delta)
 	else:
-		# In range - orbit around player with oscillation
 		orbit_player(delta, distance_to_player)
 	
 	# Always rotate to face the player
@@ -93,7 +91,10 @@ func _physics_process(delta):
 	move_and_slide()
 
 func approach_player(delta, target_pos: Vector3):
-	set_movement_target(target_pos)
+	nav_update_timer += delta
+	if nav_update_timer >= nav_update_interval:
+		set_movement_target(target_pos)
+		nav_update_timer = 0.0
 	
 	if navigation_agent.is_navigation_finished():
 		return
@@ -107,7 +108,6 @@ func approach_player(delta, target_pos: Vector3):
 	var speed_multiplier = 0.7 + sin(oscillation_time * 1.2) * 0.3
 	var current_speed = speed * speed_multiplier
 	
-	# Add side-to-side swaying motion
 	var sway_direction = Vector3(-direction.z, 0, direction.x)  # Perpendicular to movement
 	var sway_amount = sin(oscillation_time * 2.0) * 1.5  # Sway side to side
 	
@@ -117,7 +117,6 @@ func approach_player(delta, target_pos: Vector3):
 	velocity.z = lerp(velocity.z, target_velocity.z, 8.0 * delta)
 
 func retreat_from_player(delta):
-	# Move directly away from player
 	var direction_away = (global_position - player.global_position).normalized()
 	direction_away.y = 0
 	
@@ -161,41 +160,23 @@ func orbit_player(delta, distance_to_player):
 	if randf() < 0.3 * delta:  # Small chance each frame
 		orbit_direction *= -1.0
 
-func update_player_history(delta: float):
-	if not player:
-		return
-	
-	# Sample player position every frame
-	history_sample_time += delta
-	player_position_history.append(player.global_position)
-	
-	# Keep only positions from the last second
-	var samples_to_keep = int(history_duration / delta) if delta > 0 else 60
-	if player_position_history.size() > samples_to_keep:
-		player_position_history.pop_front()
-
 func get_target_position() -> Vector3:
 	if not player:
 		return global_position
 	
 	match target_mode:
 		TargetMode.PREDICT:
-			# Predict where player will be based on their velocity
-			var prediction_time = 0.5  # Predict 0.5 seconds ahead
+			var prediction_time = 0.5
 			var predicted_pos = player.global_position + player.velocity * prediction_time
 			predicted_pos.y = player.global_position.y  # Keep on ground level
 			return predicted_pos
 		
 		TargetMode.CURRENT:
-			# Target player's current position
 			return player.global_position
 		
 		TargetMode.PAST:
-			# Target where player was 1 second ago
-			if player_position_history.size() > 0:
-				return player_position_history[0]
-			else:
-				return player.global_position
+			var oldest_index = (history_index + 1) % history_size
+			return player_history[oldest_index]
 		
 		_:
 			return player.global_position

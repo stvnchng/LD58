@@ -7,6 +7,9 @@ class_name Enemy
 @export var max_radius: float = 12.0  # Maximum distance before returning to chase
 @export var wander_speed: float = 0.75  # Speed when wandering
 
+var nav_update_timer: float = 0.0
+var nav_update_interval: float = 0.1
+
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
 
@@ -21,9 +24,10 @@ var wander_radius: float = 0.0
 var target_mode: TargetMode = TargetMode.CURRENT
 var mode_switch_timer: float = 0.0
 var next_mode_switch_time: float = 0.0
-var player_position_history: Array[Vector3] = []
-var history_sample_time: float = 0.0
-var history_duration: float = 1.0  # Track position from 1 second ago
+
+var history_size: int = 60          # Max number of samples (1 second at 60 FPS)
+var player_history: Array = []      # Preallocated ring buffer
+var history_index: int = 0          # Current write index
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -35,6 +39,10 @@ func _ready():
 	
 	health.died.connect(_on_died)
 	health.health_changed.connect(_on_health_changed)
+	
+	player_history.resize(history_size)
+	for i in range(history_size):
+		player_history[i] = Vector3.ZERO
 
 func actor_setup():
 	await get_tree().physics_frame
@@ -48,9 +56,12 @@ func _physics_process(delta):
 	if not player:
 		return
 
-	update_player_history(delta)
+	var player_pos = player.global_position
+	var enemy_pos = global_position
+
+	history_index = (history_index + 1) % history_size
+	player_history[history_index] = player_pos
 	
-	# Update target mode switching timer
 	mode_switch_timer += delta
 	if mode_switch_timer >= next_mode_switch_time:
 		pick_random_target_mode()
@@ -58,53 +69,51 @@ func _physics_process(delta):
 		next_mode_switch_time = randf_range(5.0, 10.0)
 
 	var target_position = get_target_position()
+	var to_target = target_position - enemy_pos
+	to_target.y = 0
+	var distance_sq = to_target.length_squared()
 
-	var distance_to_player = global_position.distance_to(target_position)
-	
-	# Always face the player
-	var direction_to_player = (player.global_position - global_position)
-	direction_to_player.y = 0
-	if direction_to_player.length() > 0.1:
-		var target_rotation = atan2(direction_to_player.x, direction_to_player.z)
+	# face player
+	var to_player = player_pos - enemy_pos
+	to_player.y = 0
+	if to_player.length_squared() > 0.01:
+		var target_rotation = atan2(to_player.x, to_player.z)
 		rotation.y = lerp_angle(rotation.y, target_rotation, 10.0 * delta)
-	
-	# Check if we need to return to chase state
-	if distance_to_player > max_radius:
+
+	if distance_sq > max_radius * max_radius:
 		is_chasing = true
 	
 	if is_chasing:
-		# Chase state - move toward player
-		if distance_to_player <= ideal_radius:
-			# Reached ideal radius - switch to wander
+		if distance_sq <= ideal_radius * ideal_radius:
 			is_chasing = false
 			pick_new_wander_target()
 		else:
 			# Continue chasing - use smart target
-			set_movement_target(target_position)
-			
+			nav_update_timer += delta
+			if nav_update_timer >= nav_update_interval:
+				set_movement_target(target_position)
+				nav_update_timer = 0.0
+
 			if not navigation_agent.is_navigation_finished():
-				var current_agent_position: Vector3 = global_position
-				var next_path_position: Vector3 = navigation_agent.get_next_path_position()
-				var direction = (next_path_position - current_agent_position).normalized()
-				
-				var target_velocity = direction * speed
-				velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
-				velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
-	else:
-		# Wander state - move to wander target
-		var distance_to_target = global_position.distance_to(wander_target)
-		
-		if distance_to_target < 0.5:
-			# Reached wander target - pick new one
+				var next_path_pos = navigation_agent.get_next_path_position()
+				var move_dir = (next_path_pos - enemy_pos)
+				move_dir.y = 0
+				if move_dir.length_squared() > 0.0001:
+					move_dir = move_dir.normalized()
+					var target_velocity = move_dir * speed
+					velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
+					velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
+	else:		
+		if enemy_pos.distance_squared_to(wander_target) < 0.25:
 			pick_new_wander_target()
 		else:
-			# Move toward wander target
-			var direction_to_target = (wander_target - global_position).normalized()
-			direction_to_target.y = 0
-			
-			velocity.x = lerp(velocity.x, direction_to_target.x * wander_speed, acceleration * delta)
-			velocity.z = lerp(velocity.z, direction_to_target.z * wander_speed, acceleration * delta)
-	
+			var wander_dir = (wander_target - enemy_pos)
+			wander_dir.y = 0
+			if wander_dir.length_squared() > 0.0001:
+				wander_dir = wander_dir.normalized()
+				velocity.x = lerp(velocity.x, wander_dir.x * wander_speed, acceleration * delta)
+				velocity.z = lerp(velocity.z, wander_dir.z * wander_speed, acceleration * delta)
+
 	velocity.y = 0
 	move_and_slide()
 
@@ -116,19 +125,6 @@ func pick_new_wander_target():
 	var offset = Vector3(cos(random_angle) * random_distance, 0, sin(random_angle) * random_distance)
 	wander_target = global_position + offset
 	wander_target.y = global_position.y  # Keep on same Y level
-
-func update_player_history(delta: float):
-	if not player:
-		return
-	
-	# Sample player position every frame
-	history_sample_time += delta
-	player_position_history.append(player.global_position)
-	
-	# Keep only positions from the last second
-	var samples_to_keep = int(history_duration / delta) if delta > 0 else 60
-	if player_position_history.size() > samples_to_keep:
-		player_position_history.pop_front()
 
 func get_target_position() -> Vector3:
 	if not player:
@@ -145,10 +141,8 @@ func get_target_position() -> Vector3:
 			return player.global_position
 		
 		TargetMode.PAST:
-			# Target where player was 1 second ago
-			if player_position_history.size() > 0:
-				return player_position_history[0]
-			return player.global_position
+			var oldest_index = (history_index + 1) % history_size
+			return player_history[oldest_index]
 		_:
 			return player.global_position
 
