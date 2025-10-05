@@ -13,6 +13,31 @@ var survival_time: float = 0.0
 var timer_running: bool = false
 
 var candy_inventory: Dictionary[String, int] = {}
+func get_attack_speed_multiplier() -> float:
+	return 1.0 + 0.05 * candy_inventory.get("CandyCorn", 0)
+func get_move_speed_multiplier() -> float:
+	return 1.0 + 0.05 * candy_inventory.get("PixieStick", 0)
+func get_red_hot_percent() -> float:
+	return min(1.0, 0.0 + 0.05 * candy_inventory.get("RedHot", 0))
+func get_pop_rock_percent() -> float:
+	return min(1.0, 0.0 + 0.05 * candy_inventory.get("PopRock", 0))
+func get_jawbreaker_pierce() -> int:
+	return 0 + candy_inventory.get("Jawbreaker", 0)
+func get_gum_armor() -> float:
+	return 1.05 * candy_inventory.get("Gum", 0)
+func get_taffy_slow_percent() -> float:
+	return 1.0 * pow(0.95, candy_inventory.get("Taffy", 0))
+func get_candy_necklace_cooldown() -> float:
+	return 8.0 * pow(0.95, candy_inventory.get("CandyNecklace", 0))
+func get_fun_dip_max_speed() -> float:
+	return 1.0 + 0.05 * candy_inventory.get("FunDip", 0)
+func get_soda_move_speed() -> float:
+	return 1.0 + 0.05 * candy_inventory.get("Soda", 0)
+func get_licorice_pull_number() -> int:
+	return 0 + candy_inventory.get("Licorice", 0)
+func get_candy_bar_percent() -> float:
+	return log(candy_inventory.get("CandyBar", 0) + 1) / (2.0 * 2.71828)
+
 
 const candy_name_to_scn: Dictionary[String, PackedScene] = {
 	# Offensive

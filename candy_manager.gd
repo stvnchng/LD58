@@ -6,7 +6,7 @@ const DEFENSIVE_CANDIES = ["Gum", "Apple", "Taffy", "CandyNecklace"]
 const MOBILITY_CANDIES = ["PixieStick", "FunDip", "Soda"]
 const UTILITY_CANDIES = ["Licorice", "CandyBar"]
 
-const DROP_CHANCE = 1.0
+const DROP_CHANCE = 1
 const SPAWN_Y = 1.5
 const SPAWN_SCALE = 0.75
 
@@ -29,10 +29,11 @@ func _on_item_collected(item_key: String):
 
 func _on_enemy_died(enemy_type: String, death_position: Vector3):
 	# 25% chance to spawn candy
-	if randf() > DROP_CHANCE:
+	if randf() > DROP_CHANCE + GameState.get_candy_bar_percent():
 		return
 	
-	var candy_name = select_random_candy()
+	# var candy_name = select_random_candy()
+	var candy_name = "PixieStick"
 	if candy_name == null:
 		return
 	

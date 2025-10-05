@@ -4,7 +4,6 @@ class_name Player
 @export var speed: float = 5.0
 @export var rotation_speed: float = 10.0
 
-@export var dash_speed: float = 20.0
 @export var dash_duration: float = 0.2
 @export var dash_cooldown: float = 1.0
 @export var footstep_interval: float = 0.35  # Time between footsteps
@@ -27,6 +26,12 @@ var footstep_sound = preload("res://assets/sounds/footstep.wav")
 var footstep_player: AudioStreamPlayer
 var previous_health: int
 var walk_animation_name: String = ""
+
+func move_speed() -> float:
+	return speed * GameState.get_move_speed_multiplier()
+
+func dash_speed() -> float:
+	return move_speed() * 4
 
 func _ready():
 	health.died.connect(_on_died)
@@ -89,10 +94,10 @@ func _physics_process(delta):
 
 	dash_trail.enabled = (dash_timer > 0.0)
 	if dash_timer > 0.0:
-		velocity = dash_direction * dash_speed
+		velocity = dash_direction * dash_speed()
 	else:
-		velocity.x = input.x * speed
-		velocity.z = input.z * speed
+		velocity.x = input.x * move_speed()
+		velocity.z = input.z * move_speed()
 		velocity.y = 0
 
 	# Raycast from mouse to ground plane to get target position
@@ -141,7 +146,7 @@ func _physics_process(delta):
 		if is_moving and not is_dashing:
 			# Play walk animation if not already playing
 			if not animation_player.is_playing() or animation_player.current_animation != walk_animation_name:
-				animation_player.speed_scale = walk_animation_speed
+				animation_player.speed_scale = walk_animation_speed * GameState.get_move_speed_multiplier()
 				animation_player.play(walk_animation_name)
 		else:
 			# Stop animation or play idle when not moving
