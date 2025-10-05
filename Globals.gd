@@ -1,7 +1,5 @@
 extends Node
 
-
-
 # Shoot sound signal - emitted when any entity shoots
 # entity_type: String - "player", "floater", or "basic"
 signal shoot_sound(entity_type: String)
@@ -15,3 +13,9 @@ signal player_dash
 const BASIC_ENEMY := preload("res://entities/enemies/EnemyBasic.tscn")
 const LURCH_ENEMY := preload("res://entities/enemies/EnemyLurcher.tscn")
 const FLOAT_ENEMY := preload("res://entities/enemies/enemy_floater.tscn")
+
+const enemy_name_to_scn = {
+	"basic": BASIC_ENEMY,
+	"lurcher": LURCH_ENEMY,
+	"floater": FLOAT_ENEMY
+}

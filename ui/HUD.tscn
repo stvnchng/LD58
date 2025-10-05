@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://bp5f3hmxacaqi"]
+[gd_scene load_steps=5 format=3 uid="uid://bp5f3hmxacaqi"]
 
 [ext_resource type="Script" uid="uid://corft88wkfyta" path="res://ui/hud.gd" id="1_jd13s"]
 [ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_k5de2"]
 [ext_resource type="PackedScene" uid="uid://bebuv535qi6ov" path="res://ui/CandyUpgrade.tscn" id="2_efote"]
+[ext_resource type="PackedScene" uid="uid://bhnkcl7n1i711" path="res://ui/EnemyKillCount.tscn" id="4_wxbmk"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_jd13s")
@@ -27,7 +28,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 0
 theme = ExtResource("1_k5de2")
 
-[node name="Bottom" type="MarginContainer" parent="."]
+[node name="BottomLeft" type="MarginContainer" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -37,17 +38,92 @@ grow_vertical = 0
 theme_override_constants/margin_left = 48
 theme_override_constants/margin_bottom = 48
 
-[node name="Upgrades" type="HBoxContainer" parent="Bottom"]
+[node name="UpgradeRows" type="VBoxContainer" parent="BottomLeft"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Row1" type="HBoxContainer" parent="BottomLeft/UpgradeRows"]
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/separation = 12
 
-[node name="CandyUpgrade" parent="Bottom/Upgrades" instance=ExtResource("2_efote")]
+[node name="CandyUpgrade" parent="BottomLeft/UpgradeRows/Row1" instance=ExtResource("2_efote")]
 layout_mode = 2
 
-[node name="CandyUpgrade2" parent="Bottom/Upgrades" instance=ExtResource("2_efote")]
+[node name="CandyUpgrade2" parent="BottomLeft/UpgradeRows/Row1" instance=ExtResource("2_efote")]
 layout_mode = 2
 
-[node name="CandyUpgrade3" parent="Bottom/Upgrades" instance=ExtResource("2_efote")]
+[node name="CandyUpgrade3" parent="BottomLeft/UpgradeRows/Row1" instance=ExtResource("2_efote")]
 layout_mode = 2
+
+[node name="BottomCenter" type="MarginContainer" parent="."]
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -228.0
+offset_top = -180.0
+offset_right = 228.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="Upgrades" type="HBoxContainer" parent="BottomCenter"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="DashStatus" type="Panel" parent="BottomCenter/Upgrades"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+theme = ExtResource("1_k5de2")
+
+[node name="Label" type="Label" parent="BottomCenter/Upgrades/DashStatus"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "x5"
+
+[node name="BottomRight" type="MarginContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -456.0
+offset_top = -180.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
+
+[node name="KillCount" type="HBoxContainer" parent="BottomRight"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="EnemyKillCounter" parent="BottomRight/KillCount" instance=ExtResource("4_wxbmk")]
+layout_mode = 2
+enemy_name = "basic"
+
+[node name="EnemyKillCounter2" parent="BottomRight/KillCount" instance=ExtResource("4_wxbmk")]
+layout_mode = 2
+enemy_name = "lurcher"
+
+[node name="EnemyKillCounter3" parent="BottomRight/KillCount" instance=ExtResource("4_wxbmk")]
+layout_mode = 2
+enemy_name = "floater"

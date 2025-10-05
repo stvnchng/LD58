@@ -1,0 +1,44 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhnkcl7n1i711"]
+
+[ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_hp3dr"]
+[ext_resource type="Script" uid="uid://bn6w7lnb8fixi" path="res://ui/EnemyCount.gd" id="2_og40n"]
+
+[node name="EnemyKillCounter" type="Panel"]
+custom_minimum_size = Vector2(128, 128)
+theme = ExtResource("1_hp3dr")
+script = ExtResource("2_og40n")
+
+[node name="Container" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 100.0
+
+[node name="SubViewport" type="SubViewport" parent="Container"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(128, 128)
+render_target_update_mode = 4
+
+[node name="PreviewNode" type="Node3D" parent="Container/SubViewport"]
+
+[node name="ModelHolder" type="Node3D" parent="Container/SubViewport/PreviewNode"]
+
+[node name="Camera3D" type="Camera3D" parent="Container/SubViewport/PreviewNode"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Container/SubViewport/PreviewNode"]
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "x0"

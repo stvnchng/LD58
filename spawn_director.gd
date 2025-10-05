@@ -1,13 +1,5 @@
 extends Node
 
-# Enemy scene references
-var enemy_scenes = {
-	"basic": Globals.BASIC_ENEMY,
-	"lurcher": Globals.LURCH_ENEMY,
-	"floater": Globals.FLOAT_ENEMY
-}
-
-# Enemy data with costs and weights
 const ENEMY_DATA = {
 	"lurcher": {"cost": 10, "weight": 45},
 	"basic": {"cost": 12, "weight": 35},
@@ -16,7 +8,6 @@ const ENEMY_DATA = {
 
 const budget_growth = 3.0
 
-# Dynamic spawn settings
 @export var min_spawn_distance: float = 20.0  # Minimum distance from player
 @export var max_spawn_distance: float = 40.0  # Maximum distance from player
 @export var spawn_validation_attempts: int = 10  # How many times to try finding valid position
@@ -28,16 +19,13 @@ var spender_budget = 0.0
 var saver_budget = 0.0
 
 var spawn_check_timer = 0.0
-const SPAWN_CHECK_INTERVAL = 1.0  # Check once per second
-
+const SPAWN_CHECK_INTERVAL = 1.0
 
 func _ready():
-	# Find the player
 	player = get_tree().get_first_node_in_group("player")
 	if not player:
 		push_error("Spawn Director: Player not found!")
 	
-	# Find navigation region for spawn validation
 	navigation_region = _find_navigation_region(get_parent())
 	if navigation_region:
 		print("Spawn Director: Found navigation region for spawn validation")
@@ -58,11 +46,9 @@ func _find_navigation_region(node: Node) -> NavigationRegion3D:
 	return null
 
 func _process(delta):
-	# Grow budgets
 	spender_budget += budget_growth * delta
 	saver_budget += budget_growth * delta
 	
-	# Check for spawns once per second
 	spawn_check_timer += delta
 	if spawn_check_timer >= SPAWN_CHECK_INTERVAL:
 		spawn_check_timer -= SPAWN_CHECK_INTERVAL
@@ -76,7 +62,6 @@ func try_spawn_event():
 		spender_spawn_event()
 
 func saver_spawn_event():
-	# Calculate how many of each enemy type we can afford
 	var affordable_enemies = {}
 	
 	for enemy_type in ENEMY_DATA.keys():
@@ -85,7 +70,6 @@ func saver_spawn_event():
 		if max_count >= 1:
 			affordable_enemies[enemy_type] = max_count
 	
-	# If we can't afford anything, do nothing
 	if affordable_enemies.is_empty():
 		return
 	
@@ -94,13 +78,11 @@ func saver_spawn_event():
 	if selected_type == null:
 		return
 	
-	# Calculate spawn details
 	var count = affordable_enemies[selected_type]
 	var cost = ENEMY_DATA[selected_type]["cost"]
 	var total_cost = count * cost
 	var budget_before = saver_budget
 	
-	# Spawn enemies
 	spawn_enemies("SAVER", selected_type, count, total_cost, budget_before)
 	
 	# Deduct from budget
@@ -116,7 +98,6 @@ func spender_spawn_event():
 		if max_count >= 1:
 			affordable_enemies[enemy_type] = max_count
 	
-	# If we can't afford anything, do nothing
 	if affordable_enemies.is_empty():
 		return
 	
@@ -131,10 +112,8 @@ func spender_spawn_event():
 	var total_cost = count * cost
 	var budget_before = spender_budget
 	
-	# Spawn enemies
 	spawn_enemies("SPENDER", selected_type, count, total_cost, budget_before)
-	
-	# Deduct from budget
+
 	spender_budget -= total_cost
 
 func spender_spend_likelihood() -> bool:
@@ -208,7 +187,7 @@ func spawn_enemies(director: String, enemy_type: String, count: int, total_cost:
 		
 		# If we found a valid position, spawn the enemy
 		if enemy_position:
-			var enemy_scene = enemy_scenes.get(enemy_type)
+			var enemy_scene = Globals.enemy_name_to_scn.get(enemy_type)
 			if enemy_scene:
 				var enemy = enemy_scene.instantiate()
 				get_parent().add_child(enemy)
