@@ -1,11 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=9 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="PackedScene" uid="uid://68cbab2tn0vt" path="res://entities/player/player.tscn" id="1_wbfu4"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
 [ext_resource type="Script" uid="uid://bxhc6ng40go1d" path="res://spawn_director.gd" id="5_t88pq"]
 [ext_resource type="Script" uid="uid://dvrbekuhi16ys" path="res://candy_manager.gd" id="6_candy"]
-[ext_resource type="Script" path="res://audio_manager.gd" id="7_audio"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
+[ext_resource type="Script" uid="uid://djyks241ay1a3" path="res://audio_manager.gd" id="7_audio"]
 
 [sub_resource type="Environment" id="Environment_spooky"]
 background_mode = 1
@@ -395,34 +395,5 @@ script = ExtResource("6_candy")
 
 [node name="AudioManager" type="Node" parent="SubViewportContainer/SubViewport/Level"]
 script = ExtResource("7_audio")
-
-[node name="Spawns" type="Node" parent="SubViewportContainer/SubViewport/Level"]
-
-[node name="Spawn" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.820194, 1, -40.10872)
-
-[node name="Spawn2" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.205029, 1, -40.10872)
-
-[node name="Spawn3" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.6611, 1, -40.10872)
-
-[node name="Spawn4" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.831059, 1, 8.133293)
-
-[node name="Center" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.307735, 1, 8.133293)
-
-[node name="Spawn6" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.601536, 1, 8.133293)
-
-[node name="Spawn7" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.606026, 1, 54.62667)
-
-[node name="Spawn8" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3275, 1, 54.62667)
-
-[node name="Spawn9" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.958107, 1, 54.62667)
 
 [node name="Boundaries" type="Node3D" parent="SubViewportContainer/SubViewport/Level"]

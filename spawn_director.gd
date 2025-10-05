@@ -15,9 +15,14 @@ const ENEMY_DATA = {
 }
 
 const budget_growth = 3.0
-# Randomly select a spawn point, avoiding the most recent one
-var last_spawn_point = null
-var spawn_points = []
+
+# Dynamic spawn settings
+@export var min_spawn_distance: float = 20.0  # Minimum distance from player
+@export var max_spawn_distance: float = 40.0  # Maximum distance from player
+@export var spawn_validation_attempts: int = 10  # How many times to try finding valid position
+
+var player: Player = null
+var navigation_region: NavigationRegion3D = null
 
 var spender_budget = 0.0
 var saver_budget = 0.0
@@ -27,18 +32,30 @@ const SPAWN_CHECK_INTERVAL = 1.0  # Check once per second
 
 
 func _ready():
-	# Import spawn points from the Spawns node
-	var spawns_node = get_node("../Spawns")
-	if spawns_node:
-		for child in spawns_node.get_children():
-			if child is Node3D:
-				spawn_points.append(child)
+	# Find the player
+	player = get_tree().get_first_node_in_group("player")
+	if not player:
+		push_error("Spawn Director: Player not found!")
 	
-	if spawn_points.is_empty():
-		push_warning("No spawn points found in scene")
+	# Find navigation region for spawn validation
+	navigation_region = _find_navigation_region(get_parent())
+	if navigation_region:
+		print("Spawn Director: Found navigation region for spawn validation")
+	else:
+		push_warning("Spawn Director: No navigation region found - spawn validation will be limited")
 	
-	print("Spawn Director initialized with %d spawn points" % spawn_points.size())
+	print("Spawn Director initialized with dynamic spawning (%.1f - %.1f units from player)" % [min_spawn_distance, max_spawn_distance])
 	await get_tree().create_timer(2.0).timeout
+
+func _find_navigation_region(node: Node) -> NavigationRegion3D:
+	# Recursively search for NavigationRegion3D
+	if node is NavigationRegion3D:
+		return node
+	for child in node.get_children():
+		var result = _find_navigation_region(child)
+		if result:
+			return result
+	return null
 
 func _process(delta):
 	# Grow budgets
@@ -155,59 +172,97 @@ func weighted_random_from_dict(affordable_enemies: Dictionary) -> String:
 	return affordable_enemies.keys()[0] if not affordable_enemies.is_empty() else null
 
 func spawn_enemies(director: String, enemy_type: String, count: int, total_cost: float, budget_before: float):
-	# Get a spawn point
-	var spawn_point = get_random_spawn_point()
-	if spawn_point == null:
-		print("[%s] No spawn points available!" % director)
+	if not player:
+		push_warning("[%s] Cannot spawn - player not found!" % director)
 		return
 	
-	var spawn_position = spawn_point.global_position
+	# Get a valid spawn position in the donut around player
+	var spawn_center = get_valid_spawn_position()
+	if spawn_center == null:
+		push_warning("[%s] Could not find valid spawn position!" % director)
+		return
 	
-	# Detailed logging
-	# print("═══════════════════════════════════════════════════════")
-	# print("[%s] SPAWN EVENT" % director)
-	# print("  Enemy Type: %s" % enemy_type)
-	# print("  Count: %d" % count)
-	# print("  Cost per Enemy: %d" % ENEMY_DATA[enemy_type]["cost"])
-	# print("  Total Cost: %.1f" % total_cost)
-	# print("  Budget Before: %.1f" % budget_before)
-	# print("  Remaining Budget: %.1f" % (budget_before - total_cost))
-	# print("  Spawn Point: %s" % spawn_point.name)
-	# print("═══════════════════════════════════════════════════════")
+	# Spawn enemies in a circle around the spawn center
+	const HORDE_RADIUS = 6.0
+	var spawned_count = 0
 	
-	# Spawn enemies in a circle around the spawn point
-	const SPAWN_RADIUS = 12.0
 	for i in range(count):
-		# Random position within SPAWN_RADIUS
+		# Try to find a valid position within the horde circle
+		var enemy_position = null
+		
+		for attempt in range(spawn_validation_attempts):
+			# Random position within HORDE_RADIUS
+			var angle = randf() * TAU
+			var distance = randf() * HORDE_RADIUS
+			var offset = Vector3(
+				cos(angle) * distance,
+				0,
+				sin(angle) * distance
+			)
+			var test_position = spawn_center + offset
+			
+			# Validate this position
+			if is_position_valid(test_position):
+				enemy_position = test_position
+				break
+		
+		# If we found a valid position, spawn the enemy
+		if enemy_position:
+			var enemy_scene = enemy_scenes.get(enemy_type)
+			if enemy_scene:
+				var enemy = enemy_scene.instantiate()
+				get_parent().add_child(enemy)
+				enemy.global_position = enemy_position
+				spawned_count += 1
+	
+	if spawned_count < count:
+		push_warning("[%s] Only spawned %d/%d enemies due to validation failures" % [director, spawned_count, count])
+
+func get_valid_spawn_position() -> Vector3:
+	if not player:
+		return Vector3.ZERO
+	
+	# Try multiple times to find a valid position in the donut
+	for attempt in range(spawn_validation_attempts):
+		# Generate random position in donut around player
 		var angle = randf() * TAU
-		var distance = randf() * SPAWN_RADIUS
+		var distance = randf_range(min_spawn_distance, max_spawn_distance)
+		
 		var offset = Vector3(
 			cos(angle) * distance,
 			0,
 			sin(angle) * distance
 		)
 		
-		# Create enemy instance
-		var enemy_scene = enemy_scenes.get(enemy_type)
-		if enemy_scene:
-			var enemy = enemy_scene.instantiate()
-			# Add to Level node (parent of SpawnDirector) first
-			get_parent().add_child(enemy)
-			# Set position after adding to tree
-			enemy.global_position = spawn_position + offset
+		var test_position = player.global_position + offset
+		
+		# Validate the position
+		if is_position_valid(test_position):
+			return test_position
+	
+	# If all attempts failed, return a position anyway (fallback)
+	var fallback_angle = randf() * TAU
+	var fallback_distance = (min_spawn_distance + max_spawn_distance) / 2.0
+	return player.global_position + Vector3(
+		cos(fallback_angle) * fallback_distance,
+		0,
+		sin(fallback_angle) * fallback_distance
+	)
 
-
-func get_random_spawn_point() -> Node:
-	if spawn_points.is_empty():
-		return null
+func is_position_valid(position: Vector3) -> bool:
+	# Use NavigationServer to check if position is on navigation mesh
+	if navigation_region and navigation_region.navigation_mesh:
+		var map_rid = navigation_region.get_navigation_map()
+		
+		# Get the closest point on the navigation mesh
+		var closest_point = NavigationServer3D.map_get_closest_point(map_rid, position)
+		
+		# Check if the position is close enough to the nav mesh (within 2 units)
+		var distance_to_navmesh = position.distance_to(closest_point)
+		if distance_to_navmesh > 2.0:
+			return false
+		
+		return true
 	
-	if spawn_points.size() == 1:
-		return spawn_points[0]
-	
-	var available_points = spawn_points.duplicate()
-	if last_spawn_point != null and last_spawn_point in available_points:
-		available_points.erase(last_spawn_point)
-	
-	var selected = available_points[randi() % available_points.size()]
-	last_spawn_point = selected
-	return selected
+	# If no navigation mesh, just check basic bounds (fallback)
+	return true
