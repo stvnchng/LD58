@@ -1,0 +1,9 @@
+[gd_scene load_steps=2 format=3 uid="uid://wgtpom18b5i1"]
+
+[ext_resource type="PackedScene" uid="uid://bqr44p0xyfsy7" path="res://assets/player_meshes/wiz.glb" id="1_nsk0x"]
+
+[node name="wiz" instance=ExtResource("1_nsk0x")]
+
+[node name="Skeleton3D" parent="Armature" index="0"]
+bones/1/rotation = Quaternion(-5.522977e-08, -7.679137e-08, 0.9896481, -0.14351553)
+bones/2/rotation = Quaternion(-3.6918553e-07, -2.3029116e-08, 0.99247247, 0.12246782)

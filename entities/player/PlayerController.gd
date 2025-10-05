@@ -8,6 +8,7 @@ class_name Player
 @export var dash_duration: float = 0.2
 @export var dash_cooldown: float = 1.0
 @export var footstep_interval: float = 0.35  # Time between footsteps
+@export var walk_animation_speed: float = 3.0  # Speed multiplier for walk animation
 
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
@@ -19,11 +20,13 @@ var footstep_timer: float = 0.0
 @onready var health: HealthComponent = $HealthComponent
 @onready var shooting : ShootingComponent = $ShootingComponent
 @onready var dash_trail: Trail3D = $Trail3D
+@onready var animation_player: AnimationPlayer = $wiz/AnimationPlayer
 
 var last_mouse_direction: Vector3
 var footstep_sound = preload("res://assets/sounds/footstep.wav")
 var footstep_player: AudioStreamPlayer
 var previous_health: int
+var walk_animation_name: String = ""
 
 func _ready():
 	health.died.connect(_on_died)
@@ -36,6 +39,26 @@ func _ready():
 	footstep_player.volume_db = -4.0
 	footstep_player.bus = "SFX"
 	add_child(footstep_player)
+	
+	# Find walk animation name
+	if animation_player:
+		var anim_list = animation_player.get_animation_list()
+		print("Available animations: ", anim_list)
+		
+		# Look for walk animation, or use the first available animation
+		for anim in anim_list:
+			var anim_lower = anim.to_lower()
+			if "walk" in anim_lower or "action" in anim_lower:
+				walk_animation_name = anim
+				print("Using walk animation: %s" % walk_animation_name)
+				break
+		
+		# If still not found, just use the first animation
+		if walk_animation_name == "" and anim_list.size() > 0:
+			walk_animation_name = anim_list[0]
+			print("Using first animation as walk: %s" % walk_animation_name)
+	else:
+		print("Error: AnimationPlayer not found!")
 
 func _physics_process(delta):
 	if dash_timer > 0.0:
@@ -112,6 +135,18 @@ func _physics_process(delta):
 	else:
 		# Reset timer when not moving so first step plays immediately
 		footstep_timer = 0.0
+	
+	# Handle walk animation
+	if animation_player and walk_animation_name != "":
+		if is_moving and not is_dashing:
+			# Play walk animation if not already playing
+			if not animation_player.is_playing() or animation_player.current_animation != walk_animation_name:
+				animation_player.speed_scale = walk_animation_speed
+				animation_player.play(walk_animation_name)
+		else:
+			# Stop animation or play idle when not moving
+			if animation_player.is_playing() and animation_player.current_animation == walk_animation_name:
+				animation_player.stop()
 
 
 func start_dash(input: Vector3):
