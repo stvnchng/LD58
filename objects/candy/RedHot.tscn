@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=4 uid="uid://ckpb5031i5sap"]
+
+[ext_resource type="Script" uid="uid://g2gig3dqp5hh" path="res://objects/candy/candy.gd" id="1_t02fl"]
+[ext_resource type="Texture2D" uid="uid://50hlvrs7jbcg" path="res://assets/candy_meshes/RedHots_c3b8f5bc1b3db983c6532131cfb7ca90_580x_jpg.png" id="2_t02fl"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_w5sgf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hjlvb"]
+resource_name = "Material.003"
+cull_mode = 2
+albedo_texture = ExtResource("2_t02fl")
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_46r2n"]
+_surfaces = [{
+"aabb": AABB(-5.956696, -3.9350243, -0.6363167, 11.913392, 7.8700485, 1.2726334),
+"format": 34359742465,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "Material.003",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("QZ2+wHDXe8Cn5SI/QZ2+wHDXe0Cn5SK/QZ2+wHDXe0Cn5SI/QZ2+wHDXe8Cn5SK/QZ2+QHDXe0Cn5SK/QZ2+QHDXe8Cn5SI/QZ2+QHDXe0Cn5SI/QZ2+QHDXe8Cn5SK/")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_udmsa"]
+resource_name = "RedHots_Cube_002"
+_surfaces = [{
+"aabb": AABB(-5.956696, -3.9350243, -0.6363167, 11.913392, 7.8700485, 1.2726334),
+"attribute_data": PackedByteArray("SMtVPoBJQjyyyUk/wElCPLLJST/ASUI8RMtVPoBJQjxpK30/KN99PwgGgTzAqo88aSt9P8CqjzwIBoE8KN99P7hbWD7AxnE8zG1KPwDHcTzMbUo/AMdxPLhbWD7AxnE8aSt9PybffT8IBoE8wKqPPGkrfT/Aqo88CAaBPCbffT8IBoE8KN99P2krfT8m330/aSt9PyjffT8IBoE8Jt99P2krfT/Aqo88CAaBPMCqjzwIBoE8wKqPPGkrfT/Aqo88"),
+"format": 34359742487,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_hjlvb"),
+"name": "Material.003",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("QZ2+wHDXe8Cn5SI/QZ2+wHDXe0Cn5SK/QZ2+wHDXe0Cn5SI/QZ2+wHDXe8Cn5SK/QZ2+wHDXe8Cn5SK/QZ2+QHDXe0Cn5SK/QZ2+wHDXe0Cn5SK/QZ2+QHDXe8Cn5SK/QZ2+QHDXe8Cn5SK/QZ2+QHDXe0Cn5SI/QZ2+QHDXe0Cn5SK/QZ2+QHDXe8Cn5SI/QZ2+QHDXe8Cn5SI/QZ2+wHDXe0Cn5SI/QZ2+QHDXe0Cn5SI/QZ2+wHDXe8Cn5SI/QZ2+wHDXe8Cn5SK/QZ2+QHDXe8Cn5SI/QZ2+QHDXe8Cn5SK/QZ2+wHDXe8Cn5SI/QZ2+QHDXe0Cn5SK/QZ2+wHDXe0Cn5SI/QZ2+wHDXe0Cn5SK/QZ2+QHDXe0Cn5SI/AAD/f/9//z8AAP9//3//PwAA/3////+/AAD/f/9//z//////AAD/v/////8AAP+//////wAA/7//////AAD/v////3////+/////f////7////9/////v////3////+//3//f////7//f/9/////v/9//3////+//3//f////7//fwAA////v/9/AAD///+//38AAP///7//fwAA////v/9///////+//3///////7//f///////v/9///////+/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_46r2n")
+
+[node name="RedHot" type="Node3D"]
+script = ExtResource("1_t02fl")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+shape = SubResource("SphereShape3D_w5sgf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_energy = 10.0
+omni_range = 1.75
+omni_attenuation = 0.1
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+mesh = SubResource("ArrayMesh_udmsa")
+skeleton = NodePath("")

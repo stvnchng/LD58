@@ -1,0 +1,63 @@
+[gd_scene load_steps=7 format=4 uid="uid://m5ujwkatyr3s"]
+
+[ext_resource type="Script" uid="uid://g2gig3dqp5hh" path="res://objects/candy/candy.gd" id="1_82mri"]
+[ext_resource type="Texture2D" uid="uid://cm0oxj3nfn0i" path="res://assets/candy_meshes/PopRocks_all-city-candy-pop-rocks-cotton-candy-explosion-popping-candy-33-oz-package-novelty-pop-rocks-zeta-espacial-sa-1-package-593022_jpg.png" id="2_82mri"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_w5sgf"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_04euv"]
+resource_name = "Material.002"
+cull_mode = 2
+albedo_texture = ExtResource("2_82mri")
+roughness = 0.5
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_8t5m2"]
+_surfaces = [{
+"aabb": AABB(-2.176208, -3.245277, -0.58113796, 4.352416, 6.490554, 1.1622759),
+"format": 34896613377,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAACAAEAAwAEAAEABQAAAAIAAwAAAAUABAAGAAIABQACAAYAAwAHAAQAAwAFAAcABwAGAAQABwAFAAYA"),
+"name": "Material.002",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAD/////AAAAAP//AAD//wAA////////AAD//wAAAAAAAA==")
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_bygvs"]
+resource_name = "PopRocks_Cube_001"
+_surfaces = [{
+"aabb": AABB(-2.176208, -3.245277, -0.58113796, 4.352416, 6.490554, 1.1622759),
+"attribute_data": PackedByteArray("3cSqf6fRPjjdxD44p9Gqf2/OqfiILaIGb86iBogtqfin0ap/3cQ+OKfRPjjdxKp/b86p+IgtogZvzqIGiC2p+P8wqfj5yqn4+cqp+P8wqfj5ypfv/zCX7/8wl+/5ypfv"),
+"format": 34896613399,
+"index_count": 36,
+"index_data": PackedByteArray("AAABAAIAAAADAAEABAAFAAYABAAHAAUACAAJAAoACAALAAkADAANAA4ADAAPAA0AEAARABIAEAATABEAFAAVABYAFAAXABUA"),
+"material": SubResource("StandardMaterial3D_04euv"),
+"name": "Material.002",
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 24,
+"vertex_data": PackedByteArray("AAAAAP//AAAAAP//AAAAAAAA/////wAAAAAAAAAAAAAAAAAAAAD///////8AAP//AAD//wAA/////wAAAAD/////AAAAAP+//////////7//////AAD/v///AAD///+///8AAP//AIAAAP////8AgP///////wCAAAAAAP//AIAAAAAAAAD/v///AAD///+///8AAAAA/78AAAAA////v/////8AAP+/AAD//////78AAP//AAD/v/////////+//z//f/8//3//P/9//z//f/9/////f////3////9/////fwAA/38AAP9/AAD/fwAA/3////9/////f////3///wAA/38AAP9/AAD/fwAA/3////9/////f////3////9/")
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_8t5m2")
+
+[node name="PopRock" type="Node3D"]
+script = ExtResource("1_82mri")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+shape = SubResource("SphereShape3D_w5sgf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+light_energy = 10.0
+omni_range = 1.75
+omni_attenuation = 0.1
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.3, 0, 0, 0, 0.3, 0, 0, 0, 0.3, 0, 0, 0)
+mesh = SubResource("ArrayMesh_bygvs")
+skeleton = NodePath("")

@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=8 format=3 uid="uid://cklphenhukdfx"]
 
 [ext_resource type="PackedScene" uid="uid://68cbab2tn0vt" path="res://entities/player/player.tscn" id="1_wbfu4"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
 [ext_resource type="Script" uid="uid://bxhc6ng40go1d" path="res://spawn_director.gd" id="5_t88pq"]
+[ext_resource type="Script" uid="uid://dvrbekuhi16ys" path="res://candy_manager.gd" id="6_candy"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
 
 [sub_resource type="Environment" id="Environment_spooky"]
@@ -41,10 +42,12 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 stretch = true
-stretch_shrink = 6
+stretch_shrink = 5
 
 [node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
-size = Vector2i(320, 180)
+handle_input_locally = false
+size = Vector2i(384, 216)
+render_target_update_mode = 4
 
 [node name="Level" type="Node3D" parent="SubViewportContainer/SubViewport"]
 
@@ -386,6 +389,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.212414, 2.4837408, 30.7586
 [node name="SpawnDirector" type="Node" parent="SubViewportContainer/SubViewport/Level"]
 script = ExtResource("5_t88pq")
 
+[node name="CandyManager" type="Node" parent="SubViewportContainer/SubViewport/Level"]
+script = ExtResource("6_candy")
+
 [node name="Spawns" type="Node" parent="SubViewportContainer/SubViewport/Level"]
 
 [node name="Spawn" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
@@ -414,3 +420,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3275, 1, 54.62667)
 
 [node name="Spawn9" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.958107, 1, 54.62667)
+
+[node name="Boundaries" type="Node3D" parent="SubViewportContainer/SubViewport/Level"]

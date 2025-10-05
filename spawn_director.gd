@@ -63,8 +63,8 @@ func saver_spawn_event():
 	var affordable_enemies = {}
 	
 	for enemy_type in ENEMY_DATA.keys():
-		var cost = ENEMY_DATA[enemy_type]["cost"]
-		var max_count = int(saver_budget / cost)
+		var enemy_cost = ENEMY_DATA[enemy_type]["cost"]
+		var max_count = int(saver_budget / enemy_cost)
 		if max_count >= 1:
 			affordable_enemies[enemy_type] = max_count
 	
@@ -94,8 +94,8 @@ func spender_spawn_event():
 	var affordable_enemies = {}
 	
 	for enemy_type in ENEMY_DATA.keys():
-		var cost = ENEMY_DATA[enemy_type]["cost"]
-		var max_count = int(spender_budget / cost)
+		var enemy_cost = ENEMY_DATA[enemy_type]["cost"]
+		var max_count = int(spender_budget / enemy_cost)
 		if max_count >= 1:
 			affordable_enemies[enemy_type] = max_count
 	
@@ -162,7 +162,6 @@ func spawn_enemies(director: String, enemy_type: String, count: int, total_cost:
 		return
 	
 	var spawn_position = spawn_point.global_position
-	var remaining_budget = budget_before - total_cost
 	
 	# Detailed logging
 	# print("═══════════════════════════════════════════════════════")
@@ -172,7 +171,7 @@ func spawn_enemies(director: String, enemy_type: String, count: int, total_cost:
 	# print("  Cost per Enemy: %d" % ENEMY_DATA[enemy_type]["cost"])
 	# print("  Total Cost: %.1f" % total_cost)
 	# print("  Budget Before: %.1f" % budget_before)
-	# print("  Remaining Budget: %.1f" % remaining_budget)
+	# print("  Remaining Budget: %.1f" % (budget_before - total_cost))
 	# print("  Spawn Point: %s" % spawn_point.name)
 	# print("═══════════════════════════════════════════════════════")
 	
@@ -192,9 +191,10 @@ func spawn_enemies(director: String, enemy_type: String, count: int, total_cost:
 		var enemy_scene = enemy_scenes.get(enemy_type)
 		if enemy_scene:
 			var enemy = enemy_scene.instantiate()
-			enemy.global_position = spawn_position + offset
-			# Add to Level node (parent of SpawnDirector)
+			# Add to Level node (parent of SpawnDirector) first
 			get_parent().add_child(enemy)
+			# Set position after adding to tree
+			enemy.global_position = spawn_position + offset
 
 
 func get_random_spawn_point() -> Node:

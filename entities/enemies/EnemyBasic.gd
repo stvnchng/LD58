@@ -170,5 +170,5 @@ func _on_died():
 	Globals.enemy_died.emit("basic", global_position)
 	queue_free()
 
-func _on_health_changed(new_health: int, max_health: int):
+func _on_health_changed(_new_health: int, _max_health: int):
 	pass

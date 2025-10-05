@@ -22,7 +22,7 @@ transparency = 1
 blend_mode = 1
 albedo_color = Color(0.6465643, 0.11457265, 9.62615e-08, 0.2509804)
 emission_enabled = true
-emission = Color(0.7, 0.3, 1, 1)
+emission = Color(1, 0, 0, 1)
 emission_energy_multiplier = 2.0
 disable_receive_shadows = true
 proximity_fade_enabled = true
@@ -39,11 +39,12 @@ mesh = SubResource("SphereMesh_core")
 surface_material_override/0 = SubResource("StandardMaterial3D_core")
 
 [node name="PurpleAura" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 mesh = SubResource("SphereMesh_aura")
 surface_material_override/0 = SubResource("StandardMaterial3D_aura")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
-light_color = Color(0.85, 0.7, 1, 1)
+light_color = Color(1, 0.33175027, 0.26607275, 1)
 light_energy = 8.0
 light_size = 0.5
 omni_range = 8.0
