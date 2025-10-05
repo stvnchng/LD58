@@ -38,7 +38,7 @@ func _ready():
 		push_warning("No spawn points found in scene")
 	
 	print("Spawn Director initialized with %d spawn points" % spawn_points.size())
-	await get_tree().create_timer(3.0).timeout
+	await get_tree().create_timer(2.0).timeout
 
 func _process(delta):
 	# Grow budgets

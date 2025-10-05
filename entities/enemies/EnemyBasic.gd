@@ -12,6 +12,7 @@ var nav_update_interval: float = 0.1
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
+@onready var shooting: ShootingComponent = $ShootingComponent
 
 # Targeting modes for more natural pathfinding
 enum TargetMode { PREDICT, CURRENT, PAST }
@@ -103,6 +104,15 @@ func _physics_process(delta):
 					var target_velocity = move_dir * speed
 					velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
 					velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
+					var viewport = get_viewport()
+					var screen_pos = viewport.get_camera_3d().unproject_position(global_position)
+					var on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
+						and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
+
+					if on_screen:
+						shooting.shoot_direction = move_dir
+						shooting.try_shoot()
+
 	else:		
 		if enemy_pos.distance_squared_to(wander_target) < 0.25:
 			pick_new_wander_target()

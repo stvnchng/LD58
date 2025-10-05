@@ -1,7 +1,6 @@
-[gd_scene load_steps=8 format=3 uid="uid://cklphenhukdfx"]
+[gd_scene load_steps=7 format=3 uid="uid://cklphenhukdfx"]
 
-[ext_resource type="PackedScene" uid="uid://ckudr8chj1kgo" path="res://entities/player/player.tscn" id="1_wbfu4"]
-[ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/PlayerBullet.tscn" id="2_r0x5m"]
+[ext_resource type="PackedScene" uid="uid://68cbab2tn0vt" path="res://entities/player/player.tscn" id="1_wbfu4"]
 [ext_resource type="PackedScene" uid="uid://knndaaecpw2o" path="res://map/Map.tscn" id="3_u44n3"]
 [ext_resource type="Script" uid="uid://bxhc6ng40go1d" path="res://spawn_director.gd" id="5_t88pq"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
@@ -36,7 +35,6 @@ agent_max_climb = 0.0
 
 [node name="CharacterBody3D" parent="." instance=ExtResource("1_wbfu4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.28726, 1, 8.333862)
-projectile_scene = ExtResource("2_r0x5m")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_spooky")

@@ -1,6 +1,6 @@
-[gd_scene load_steps=7 format=3 uid="uid://bq4avu0dj3pt"]
+[gd_scene load_steps=7 format=3 uid="uid://bwdqw8i4gop5b"]
 
-[ext_resource type="Script" uid="uid://d0jo0cg8uxxqc" path="res://objects/projectiles/PlayerBullet.gd" id="1_magic"]
+[ext_resource type="Script" uid="uid://d0jo0cg8uxxqc" path="res://objects/projectiles/Bullet.gd" id="1_vxqqg"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_core"]
 radius = 0.15
@@ -20,7 +20,7 @@ rings = 16
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aura"]
 transparency = 1
 blend_mode = 1
-albedo_color = Color(0.6, 0.2, 1, 0.25)
+albedo_color = Color(0.6465643, 0.11457265, 9.62615e-08, 0.2509804)
 emission_enabled = true
 emission = Color(0.7, 0.3, 1, 1)
 emission_energy_multiplier = 2.0
@@ -31,8 +31,8 @@ proximity_fade_distance = 0.3
 [sub_resource type="SphereShape3D" id="SphereShape3D_1ucim"]
 radius = 0.16
 
-[node name="PlayerBullet" type="Node3D"]
-script = ExtResource("1_magic")
+[node name="EnemyBullet" type="Node3D"]
+script = ExtResource("1_vxqqg")
 
 [node name="CoreOrb" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_core")
@@ -50,9 +50,7 @@ omni_range = 8.0
 omni_attenuation = 2.0
 
 [node name="Area3D" type="Area3D" parent="."]
-collision_layer = 4
-collision_mask = 2
+collision_layer = 16
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 shape = SubResource("SphereShape3D_1ucim")

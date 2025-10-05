@@ -1,6 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://ckudr8chj1kgo"]
+[gd_scene load_steps=11 format=3 uid="uid://68cbab2tn0vt"]
 
 [ext_resource type="Script" uid="uid://cevkiaea4t2gp" path="res://entities/player/PlayerController.gd" id="1_4flbx"]
+[ext_resource type="PackedScene" uid="uid://c476en2u71wop" path="res://entities/components/ShootingComponent.tscn" id="2_453mm"]
+[ext_resource type="PackedScene" uid="uid://bq4avu0dj3pt" path="res://objects/projectiles/Bullet.tscn" id="3_l3c03"]
+[ext_resource type="PackedScene" uid="uid://csdi4ym7u24ht" path="res://entities/components/HealthComponent.tscn" id="4_g3lhm"]
+[ext_resource type="PackedScene" uid="uid://cxlk03l7oen6n" path="res://entities/components/HPBar.tscn" id="5_4pwj0"]
+[ext_resource type="PackedScene" uid="uid://uggvhw2m2ibc" path="res://entities/components/DashTrail.tscn" id="6_8fjmc"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6ubv3"]
 
@@ -8,8 +13,11 @@
 
 [sub_resource type="BoxMesh" id="BoxMesh_wbfu4"]
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_fmb3c"]
+viewport_path = NodePath("SubViewport")
+
 [node name="Player" type="CharacterBody3D" groups=["player"]]
-collision_mask = 14
+collision_mask = 30
 up_direction = Vector3(0, 0.9999998, 0.0006666666)
 script = ExtResource("1_4flbx")
 
@@ -48,3 +56,15 @@ transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 1
 light_energy = 5.0
 spot_range = 24.026943
 spot_angle = 56.80418
+
+[node name="ShootingComponent" parent="." instance=ExtResource("2_453mm")]
+projectile_scene = ExtResource("3_l3c03")
+
+[node name="HealthComponent" parent="." instance=ExtResource("4_g3lhm")]
+max_health = 200
+
+[node name="HpBar" parent="." instance=ExtResource("5_4pwj0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+texture = SubResource("ViewportTexture_fmb3c")
+
+[node name="Trail3D" parent="." instance=ExtResource("6_8fjmc")]

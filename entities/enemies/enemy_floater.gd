@@ -5,11 +5,12 @@ class_name EnemyFloater
 @export var min_distance: float = 8.0  # Minimum distance from player
 @export var max_distance: float = 12.0  # Maximum distance from player
 @export var preferred_distance: float = 4.5  # Sweet spot distance
-@export var orbit_speed: float = 3.0  # How fast to circle around player
+@export var orbit_speed: float = 5.0  # How fast to circle around player
 @export var rotation_speed: float = 8.0  # How fast to rotate to face player
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
+@onready var shooting: ShootingComponent = $ShootingComponent
 
 var player: Player = null
 var orbit_angle: float = 0.0  # Current angle around the player
@@ -86,6 +87,17 @@ func _physics_process(delta):
 	if direction_to_player.length() > 0.1:
 		var target_rotation = atan2(direction_to_player.x, direction_to_player.z)
 		rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * delta)
+		
+		var viewport = get_viewport()
+		var screen_pos = viewport.get_camera_3d().unproject_position(global_position)
+		var on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
+			and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
+
+		var fire_chance = 0.5
+		if on_screen and distance_to_player >= min_distance and distance_to_player <= max_distance:
+			if randf() < fire_chance:
+				shooting.shoot_direction = direction_to_player
+				shooting.try_shoot()
 	
 	velocity.y = 0
 	move_and_slide()

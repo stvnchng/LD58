@@ -1,31 +1,30 @@
 extends Node3D
+class_name Bullet
 
 @export var speed: float = 50.0
-@export var lifetime: float = 5.0
-@export var acceleration: float = 250.0
-@export var max_speed: float = 500.0
+@export var lifetime: float = 2.0
 @export var damage: int = 10
 
 @onready var hitbox: Area3D = $Area3D
 
 var direction: Vector3 = Vector3.FORWARD
 var lifetime_timer: float = 0.0
-var current_speed: float = 5.0
 
 func _ready():
 	lifetime_timer = lifetime
 	hitbox.body_entered.connect(_on_body_entered)
 
 func _process(delta):
-	current_speed = min(current_speed + acceleration * delta, max_speed)
-	global_position += direction * current_speed * delta
+	global_position += direction * speed * delta
 
 	lifetime_timer -= delta
 	if lifetime_timer <= 0.0:
 		queue_free()
 
-func set_direction(new_direction: Vector3):
+func set_direction(new_direction: Vector3, new_speed: float = -1.0):
 	direction = new_direction.normalized()
+	if new_speed > 0.0:
+		speed = new_speed
 
 func _on_body_entered(body: Node):
 	if body.has_node("HealthComponent"):

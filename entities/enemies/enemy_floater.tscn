@@ -1,9 +1,11 @@
-[gd_scene load_steps=10 format=4 uid="uid://b885s7bvrq8ce"]
+[gd_scene load_steps=12 format=4 uid="uid://b885s7bvrq8ce"]
 
 [ext_resource type="Script" uid="uid://c6ohm78mq36x6" path="res://entities/enemies/enemy_floater.gd" id="1_floater"]
 [ext_resource type="Texture2D" uid="uid://c8ww70xlt6mhu" path="res://assets/enemy_meshes/GHOST_Untitled.png" id="2_vh0at"]
 [ext_resource type="PackedScene" uid="uid://csdi4ym7u24ht" path="res://entities/components/HealthComponent.tscn" id="3_3xerw"]
 [ext_resource type="PackedScene" uid="uid://cxlk03l7oen6n" path="res://entities/components/HPBar.tscn" id="4_4g1gi"]
+[ext_resource type="PackedScene" uid="uid://c476en2u71wop" path="res://entities/components/ShootingComponent.tscn" id="5_sqwww"]
+[ext_resource type="PackedScene" uid="uid://bwdqw8i4gop5b" path="res://objects/projectiles/EnemyBullet.tscn" id="6_lhmpi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3uqe"]
 resource_name = "Material.017"
@@ -70,3 +72,8 @@ shape = SubResource("CapsuleShape3D_vh0at")
 [node name="HpBar" parent="." instance=ExtResource("4_4g1gi")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
 texture = SubResource("ViewportTexture_sqwww")
+
+[node name="ShootingComponent" parent="." instance=ExtResource("5_sqwww")]
+projectile_scene = ExtResource("6_lhmpi")
+fire_rate = 1.0
+projectile_speed = 10.0
