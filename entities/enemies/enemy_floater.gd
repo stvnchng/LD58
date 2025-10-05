@@ -87,14 +87,18 @@ func _physics_process(delta):
 	if direction_to_player.length() > 0.1:
 		var target_rotation = atan2(direction_to_player.x, direction_to_player.z)
 		rotation.y = lerp_angle(rotation.y, target_rotation, rotation_speed * delta)
-		
-		var viewport = get_viewport()
-		var screen_pos = viewport.get_camera_3d().unproject_position(global_position)
-		var on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
+	
+	var viewport = get_viewport()
+	var camera = viewport.get_camera_3d() if viewport else null
+	var on_screen = false
+	
+	if camera:
+		var screen_pos = camera.unproject_position(global_position)
+		on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
 			and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
 
-		var fire_chance = 0.5
-		if on_screen and distance_to_player >= min_distance and distance_to_player <= max_distance:
+	var fire_chance = 0.5
+	if on_screen and distance_to_player >= min_distance and distance_to_player <= max_distance:
 			if randf() < fire_chance:
 				shooting.shoot_direction = direction_to_player
 				shooting.try_shoot()

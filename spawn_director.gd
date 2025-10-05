@@ -193,7 +193,8 @@ func spawn_enemies(director: String, enemy_type: String, count: int, total_cost:
 		if enemy_scene:
 			var enemy = enemy_scene.instantiate()
 			enemy.global_position = spawn_position + offset
-			get_tree().root.add_child(enemy)
+			# Add to Level node (parent of SpawnDirector)
+			get_parent().add_child(enemy)
 
 
 func get_random_spawn_point() -> Node:

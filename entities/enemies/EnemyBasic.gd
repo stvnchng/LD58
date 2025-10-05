@@ -95,23 +95,29 @@ func _physics_process(delta):
 				set_movement_target(target_position)
 				nav_update_timer = 0.0
 
-			if not navigation_agent.is_navigation_finished():
-				var next_path_pos = navigation_agent.get_next_path_position()
-				var move_dir = (next_path_pos - enemy_pos)
-				move_dir.y = 0
-				if move_dir.length_squared() > 0.0001:
-					move_dir = move_dir.normalized()
-					var target_velocity = move_dir * speed
-					velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
-					velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
-					var viewport = get_viewport()
-					var screen_pos = viewport.get_camera_3d().unproject_position(global_position)
-					var on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
-						and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
+		if not navigation_agent.is_navigation_finished():
+			var next_path_pos = navigation_agent.get_next_path_position()
+			var move_dir = (next_path_pos - enemy_pos)
+			move_dir.y = 0
+			var target_velocity = Vector3.ZERO
+			if move_dir.length_squared() > 0.0001:
+				move_dir = move_dir.normalized()
+				target_velocity = move_dir * speed
+			velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
+			velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
+			
+			var viewport = get_viewport()
+			var camera = viewport.get_camera_3d() if viewport else null
+			var on_screen = false
+			
+			if camera:
+				var screen_pos = camera.unproject_position(global_position)
+				on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
+					and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
 
-					if on_screen:
-						shooting.shoot_direction = move_dir
-						shooting.try_shoot()
+			if on_screen:
+				shooting.shoot_direction = move_dir
+				shooting.try_shoot()
 
 	else:		
 		if enemy_pos.distance_squared_to(wander_target) < 0.25:

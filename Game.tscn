@@ -33,369 +33,384 @@ agent_max_climb = 0.0
 
 [node name="Main" type="Node3D"]
 
-[node name="CharacterBody3D" parent="." instance=ExtResource("1_wbfu4")]
+[node name="SubViewportContainer" type="SubViewportContainer" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+stretch_shrink = 6
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer"]
+size = Vector2i(320, 180)
+
+[node name="Level" type="Node3D" parent="SubViewportContainer/SubViewport"]
+
+[node name="CharacterBody3D" parent="SubViewportContainer/SubViewport/Level" instance=ExtResource("1_wbfu4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.28726, 1, 8.333862)
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="SubViewportContainer/SubViewport/Level"]
 environment = SubResource("Environment_spooky")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="SubViewportContainer/SubViewport/Level"]
+transform = Transform3D(1, 0, 0, 0, 0.7071068, 0.7071068, 0, -0.7071068, 0.7071068, 0, 0, 0)
 light_color = Color(0.6, 0.65, 0.85, 1)
 light_energy = 0.3
 shadow_enabled = true
 
-[node name="NavigationRegion3D" type="NavigationRegion3D" parent="."]
+[node name="NavigationRegion3D" type="NavigationRegion3D" parent="SubViewportContainer/SubViewport/Level"]
 navigation_mesh = SubResource("NavigationMesh_joorw")
 
-[node name="Map" parent="NavigationRegion3D" instance=ExtResource("3_u44n3")]
+[node name="Map" parent="SubViewportContainer/SubViewport/Level/NavigationRegion3D" instance=ExtResource("3_u44n3")]
 transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, -2, 0)
 
-[node name="StreetLights" type="Node3D" parent="."]
+[node name="StreetLights" type="Node3D" parent="SubViewportContainer/SubViewport/Level"]
 
-[node name="OmniLight3D" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.238612, 4.8820386, 1.9653511)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D2" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.462318, 4.8820386, 1.9653511)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D3" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D3" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.462318, 4.8820386, 13.528629)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D4" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D4" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.79657, 4.8820386, 13.528629)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D5" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D5" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.479197, 4.8820386, 13.528629)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D7" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D7" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.107977, 4.8820386, 14.020254)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D8" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D8" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.16526, 4.8820386, -2.8372288)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D6" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D6" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.29068, 4.8820386, 1.9946079)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D9" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D9" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.000918, 4.8820386, 1.9946079)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D10" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D10" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.013967752, 4.8820386, 1.9946079)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D11" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D11" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.3720856, 4.8820386, 30.798748)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D12" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D12" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.481508, 4.8820386, 49.054855)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D17" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D17" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.075569, 4.8820386, 49.054855)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D19" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D19" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.41584206, 4.8820386, 61.184788)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D18" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D18" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.355316, 4.8820386, 49.054855)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D20" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D20" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31.28438, 4.8820386, 61.177483)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D21" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D21" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.808723, 4.8820386, 61.177483)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D22" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D22" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.438206, 4.8820386, 61.177483)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D23" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D23" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.930786, 4.8820386, 49.084892)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D24" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D24" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.24759, 4.8820386, 46.158188)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D25" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D25" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.24759, 4.8820386, 33.909626)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D26" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D26" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.24759, 4.8820386, 17.49244)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D27" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D27" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.612457, 4.8820386, 13.488342)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D28" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D28" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.94121, 4.8820386, 2.0278149)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D29" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D29" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 51.373936, 4.8820386, 2.0278149)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D30" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D30" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.28262, 4.8820386, -3.492351)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D31" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D31" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.28262, 4.8820386, -13.603612)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D32" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D32" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69.28262, 4.8820386, -35.02224)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D33" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D33" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.67984, 4.8820386, -33.606186)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D34" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D34" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 57.67984, 4.8820386, -46.153572)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D35" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D35" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 49.708458, 4.8820386, -33.64939)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D36" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D36" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 40.459606, 4.8820386, -46.15914)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D37" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D37" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.931067, 4.8820386, -46.21267)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D38" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D38" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.497429, 4.8820386, -33.629456)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D39" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D39" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.000088, 4.8820386, -33.588745)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D40" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D40" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.422642, 4.8820386, -46.15258)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D41" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D41" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.0950637, 4.8820386, -46.19667)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D42" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D42" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.968136, 4.8820386, -46.19667)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D43" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D43" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.29395, 4.8820386, -33.692)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D44" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D44" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.148666, 4.8820386, -35.51615)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D45" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D45" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.31168, 4.8820386, -26.497314)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D46" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D46" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.294132, 4.8820386, -21.955349)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D47" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D47" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.11347, 4.8820386, -17.854858)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D48" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D48" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8108306, 4.8820386, -16.302048)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D49" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D49" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14.345358, 4.8820386, -24.520744)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D50" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D50" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25.589144, 4.8820386, -24.501791)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D51" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D51" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 38.98335, 4.8820386, -20.90738)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D52" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D52" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 47.03336, 4.8820386, -13.431904)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D13" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D13" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -17.64898, 4.8820386, 61.188953)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D14" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D14" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22.95073, 4.8820386, 61.188953)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D15" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D15" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.09559, 4.8820386, 51.083576)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="OmniLight3D16" type="OmniLight3D" parent="StreetLights"]
+[node name="OmniLight3D16" type="OmniLight3D" parent="SubViewportContainer/SubViewport/Level/StreetLights"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -30.09559, 4.8820386, 35.359013)
 light_color = Color(1, 0.7921569, 0, 1)
 light_energy = 6.0
 omni_range = 12.0
 
-[node name="AtmosphericGhosts" parent="StreetLights" instance=ExtResource("7_3mrqo")]
+[node name="AtmosphericGhosts" parent="SubViewportContainer/SubViewport/Level/StreetLights" instance=ExtResource("7_3mrqo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 41.212414, 2.4837408, 30.75861)
 
-[node name="SpawnDirector" type="Node" parent="."]
+[node name="SpawnDirector" type="Node" parent="SubViewportContainer/SubViewport/Level"]
 script = ExtResource("5_t88pq")
 
-[node name="Spawns" type="Node" parent="."]
+[node name="Spawns" type="Node" parent="SubViewportContainer/SubViewport/Level"]
 
-[node name="Spawn" type="Node3D" parent="Spawns"]
+[node name="Spawn" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -23.820194, 1, -40.10872)
 
-[node name="Spawn2" type="Node3D" parent="Spawns"]
+[node name="Spawn2" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.205029, 1, -40.10872)
 
-[node name="Spawn3" type="Node3D" parent="Spawns"]
+[node name="Spawn3" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.6611, 1, -40.10872)
 
-[node name="Spawn4" type="Node3D" parent="Spawns"]
+[node name="Spawn4" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.831059, 1, 8.133293)
 
-[node name="Center" type="Node3D" parent="Spawns"]
+[node name="Center" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.307735, 1, 8.133293)
 
-[node name="Spawn6" type="Node3D" parent="Spawns"]
+[node name="Spawn6" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63.601536, 1, 8.133293)
 
-[node name="Spawn7" type="Node3D" parent="Spawns"]
+[node name="Spawn7" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -24.606026, 1, 54.62667)
 
-[node name="Spawn8" type="Node3D" parent="Spawns"]
+[node name="Spawn8" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20.3275, 1, 54.62667)
 
-[node name="Spawn9" type="Node3D" parent="Spawns"]
+[node name="Spawn9" type="Node3D" parent="SubViewportContainer/SubViewport/Level/Spawns"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 62.958107, 1, 54.62667)
