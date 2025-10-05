@@ -1,7 +1,9 @@
-[gd_scene load_steps=7 format=4 uid="uid://b885s7bvrq8ce"]
+[gd_scene load_steps=10 format=4 uid="uid://b885s7bvrq8ce"]
 
 [ext_resource type="Script" uid="uid://c6ohm78mq36x6" path="res://entities/enemies/enemy_floater.gd" id="1_floater"]
 [ext_resource type="Texture2D" uid="uid://c8ww70xlt6mhu" path="res://assets/enemy_meshes/GHOST_Untitled.png" id="2_vh0at"]
+[ext_resource type="PackedScene" uid="uid://csdi4ym7u24ht" path="res://entities/components/HealthComponent.tscn" id="3_3xerw"]
+[ext_resource type="PackedScene" uid="uid://cxlk03l7oen6n" path="res://entities/components/HPBar.tscn" id="4_4g1gi"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3uqe"]
 resource_name = "Material.017"
@@ -45,6 +47,9 @@ shadow_mesh = SubResource("ArrayMesh_eg6it")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_vh0at"]
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_sqwww"]
+viewport_path = NodePath("SubViewport")
+
 [node name="EnemyFloater" type="CharacterBody3D"]
 script = ExtResource("1_floater")
 
@@ -57,3 +62,9 @@ skeleton = NodePath("")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_vh0at")
+
+[node name="HealthComponent" parent="." instance=ExtResource("3_3xerw")]
+
+[node name="HpBar" parent="." instance=ExtResource("4_4g1gi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+texture = SubResource("ViewportTexture_sqwww")

@@ -47,5 +47,4 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_fscdw")
 theme_override_styles/fill = SubResource("StyleBoxFlat_5qotq")
-value = 50.0
 show_percentage = false

@@ -160,5 +160,4 @@ func _on_died():
 	queue_free()
 
 func _on_health_changed(new_health: int, max_health: int):
-	#print("Enemy HP: %d/%d" % [new_health, max_health])
 	pass

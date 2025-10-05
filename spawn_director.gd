@@ -2,9 +2,9 @@ extends Node
 
 # Enemy scene references
 var enemy_scenes = {
-	"basic": preload("res://entities/enemies/enemy.tscn"),
-	"lurcher": preload("res://entities/enemies/enemy_lurcher.tscn"),
-	"floater": preload("res://entities/enemies/enemy_floater.tscn")
+	"basic": Globals.BASIC_ENEMY,
+	"lurcher": Globals.LURCH_ENEMY,
+	"floater": Globals.FLOAT_ENEMY
 }
 
 # Enemy data with costs and weights

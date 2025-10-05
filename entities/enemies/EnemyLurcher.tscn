@@ -1,0 +1,41 @@
+[gd_scene load_steps=9 format=3 uid="uid://wg8ku40r050a"]
+
+[ext_resource type="Script" uid="uid://c2m28fg51cx3w" path="res://entities/enemies/EnemyLurcher.gd" id="2_fsyyr"]
+[ext_resource type="PackedScene" uid="uid://csdi4ym7u24ht" path="res://entities/components/HealthComponent.tscn" id="2_gieha"]
+[ext_resource type="PackedScene" uid="uid://cxlk03l7oen6n" path="res://entities/components/HPBar.tscn" id="3_4w2p5"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_enemy"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fv70n"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_enemy"]
+material = SubResource("StandardMaterial3D_fv70n")
+
+[sub_resource type="BoxMesh" id="BoxMesh_fw1ev"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_5lf1o"]
+viewport_path = NodePath("SubViewport")
+
+[node name="EnemyLurcher" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 7
+script = ExtResource("2_fsyyr")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_enemy")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_enemy")
+
+[node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 0.5, 0, 0.4619131, 0.37946033)
+mesh = SubResource("BoxMesh_fw1ev")
+
+[node name="HealthComponent" parent="." instance=ExtResource("2_gieha")]
+
+[node name="HpBar" parent="." instance=ExtResource("3_4w2p5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+texture = SubResource("ViewportTexture_5lf1o")

@@ -16,4 +16,3 @@ func _ready():
 func _on_health_changed(new_health: int, max_health: int):
 	bar.max_value = max_health
 	bar.value = new_health
-	print(new_health, max_health)

@@ -9,6 +9,7 @@ class_name EnemyLurcher
 @export var circle_speed: float = 0.3  # Speed when circling player
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+@onready var health: HealthComponent = $HealthComponent
 
 var player: Player = null
 var is_lurching: bool = false
@@ -112,3 +113,9 @@ func start_lurch():
 func end_lurch():
 	is_lurching = false
 	pause_timer = lurch_pause
+
+func _on_died():
+	queue_free()
+
+func _on_health_changed(new_health: int, max_health: int):
+	pass

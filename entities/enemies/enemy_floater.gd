@@ -9,6 +9,7 @@ class_name EnemyFloater
 @export var rotation_speed: float = 8.0  # How fast to rotate to face player
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
+@onready var health: HealthComponent = $HealthComponent
 
 # Targeting modes for more natural pathfinding
 enum TargetMode { PREDICT, CURRENT, PAST }
@@ -36,6 +37,9 @@ func _ready():
 	# Initialize targeting mode
 	pick_random_target_mode()
 	next_mode_switch_time = randf_range(5.0, 10.0)
+	
+	health.died.connect(_on_died)
+	health.health_changed.connect(_on_health_changed)
 
 func actor_setup():
 	await get_tree().physics_frame
@@ -199,3 +203,9 @@ func get_target_position() -> Vector3:
 func pick_random_target_mode():
 	var modes = [TargetMode.PREDICT, TargetMode.CURRENT, TargetMode.PAST]
 	target_mode = modes[randi() % modes.size()]
+
+func _on_died():
+	queue_free()
+
+func _on_health_changed(new_health: int, max_health: int):
+	pass

@@ -14,6 +14,10 @@ config/name="New Game Project"
 run/main_scene="uid://cklphenhukdfx"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 
+[autoload]
+
+Globals="*res://Globals.gd"
+
 [display]
 
 window/size/viewport_width=1920
