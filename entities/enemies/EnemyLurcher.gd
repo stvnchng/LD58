@@ -28,6 +28,9 @@ func _ready():
 	pause_timer = lurch_pause 
 	circle_direction = 1.0 if randf() > 0.5 else -1.0  # Random initial circle direction
 
+	health.died.connect(_on_died)
+	health.health_changed.connect(_on_health_changed)
+
 func actor_setup():
 	await get_tree().physics_frame
 	if player:

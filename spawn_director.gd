@@ -14,7 +14,7 @@ const ENEMY_DATA = {
 	"floater": {"cost": 15, "weight": 20}
 }
 
-const budget_growth = 6.0
+const budget_growth = 3.0
 # Randomly select a spawn point, avoiding the most recent one
 var last_spawn_point = null
 var spawn_points = []

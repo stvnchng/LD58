@@ -1,9 +1,9 @@
 extends Node3D
 
-@export var speed: float = 20.0
+@export var speed: float = 50.0
 @export var lifetime: float = 5.0
-@export var acceleration: float = 40.0
-@export var max_speed: float = 60.0
+@export var acceleration: float = 250.0
+@export var max_speed: float = 500.0
 @export var damage: int = 10
 
 @onready var hitbox: Area3D = $Area3D

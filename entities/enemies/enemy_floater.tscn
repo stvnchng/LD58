@@ -51,6 +51,8 @@ shadow_mesh = SubResource("ArrayMesh_eg6it")
 viewport_path = NodePath("SubViewport")
 
 [node name="EnemyFloater" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 7
 script = ExtResource("1_floater")
 
 [node name="NavigationAgent3D" type="NavigationAgent3D" parent="."]
