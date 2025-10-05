@@ -100,7 +100,7 @@ func _physics_process(delta):
 	var fire_chance = 0.5
 	if on_screen and distance_to_player >= min_distance and distance_to_player <= max_distance:
 			if randf() < fire_chance:
-				shooting.shoot_direction = direction_to_player
+				shooting.shoot_direction = direction_to_player.normalized()
 				shooting.try_shoot()
 	
 	velocity.y = 0

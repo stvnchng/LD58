@@ -7,10 +7,12 @@ class_name Player
 @export var dash_speed: float = 20.0
 @export var dash_duration: float = 0.2
 @export var dash_cooldown: float = 1.0
+@export var footstep_interval: float = 0.35  # Time between footsteps
 
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var dash_direction: Vector3 = Vector3.ZERO
+var footstep_timer: float = 0.0
 
 @onready var camera_rig = $CameraRig
 @onready var camera = $CameraRig/Camera3D
@@ -19,10 +21,21 @@ var dash_direction: Vector3 = Vector3.ZERO
 @onready var dash_trail: Trail3D = $Trail3D
 
 var last_mouse_direction: Vector3
+var footstep_sound = preload("res://assets/sounds/footstep.wav")
+var footstep_player: AudioStreamPlayer
+var previous_health: int
 
 func _ready():
 	health.died.connect(_on_died)
 	health.health_changed.connect(_on_health_changed)
+	previous_health = health.current_health
+	
+	# Create footstep audio player
+	footstep_player = AudioStreamPlayer.new()
+	footstep_player.stream = footstep_sound
+	footstep_player.volume_db = -4.0
+	footstep_player.bus = "SFX"
+	add_child(footstep_player)
 
 func _physics_process(delta):
 	if dash_timer > 0.0:
@@ -84,6 +97,21 @@ func _physics_process(delta):
 		camera_rig.global_rotation.y = 0
 
 	move_and_slide()
+	
+	# Handle footsteps
+	var is_moving = velocity.length() > 0.1
+	var is_dashing = dash_timer > 0.0
+	
+	if is_moving and not is_dashing:
+		footstep_timer -= delta
+		if footstep_timer <= 0.0:
+			# Play footstep with pitch variation
+			footstep_player.pitch_scale = randf_range(0.9, 1.1)
+			footstep_player.play()
+			footstep_timer = footstep_interval
+	else:
+		# Reset timer when not moving so first step plays immediately
+		footstep_timer = 0.0
 
 
 func start_dash(input: Vector3):
@@ -94,6 +122,9 @@ func start_dash(input: Vector3):
 
 	dash_timer = dash_duration
 	dash_cooldown_timer = dash_cooldown
+	
+	# Emit dash signal for sound
+	Globals.player_dash.emit()
 
 func is_invincible() -> bool:
 	return dash_timer > 0.0
@@ -102,5 +133,8 @@ func _on_died():
 	print('u died bro')
 	queue_free()
 
-func _on_health_changed(_new_health: int, _max_health: int):
-	pass
+func _on_health_changed(new_health: int, _max_health: int):
+	# Emit hurt signal if health decreased
+	if new_health < previous_health:
+		Globals.player_hurt.emit()
+	previous_health = new_health

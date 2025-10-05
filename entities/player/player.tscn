@@ -299,6 +299,7 @@ spot_angle = 56.80418
 
 [node name="ShootingComponent" parent="." instance=ExtResource("2_453mm")]
 projectile_scene = ExtResource("3_l3c03")
+entity_type = "player"
 
 [node name="HealthComponent" parent="." instance=ExtResource("4_g3lhm")]
 max_health = 200

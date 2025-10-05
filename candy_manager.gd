@@ -36,6 +36,9 @@ const DROP_CHANCE = 0.25  # 25% chance to spawn candy on enemy death
 const SPAWN_Y = 1.5
 const SPAWN_SCALE = 0.75
 
+# Reference to audio manager
+var audio_manager
+
 func _ready():
 	# Initialize inventory with all candy types at 0
 	for candy_name in candy_scenes.keys():
@@ -45,9 +48,16 @@ func _ready():
 	Globals.item_collected.connect(_on_item_collected)
 	Globals.enemy_died.connect(_on_enemy_died)
 	
+	# Get reference to audio manager (sibling node)
+	audio_manager = get_node("../AudioManager")
+	
 	print("Candy Manager initialized with %d candy types" % candy_scenes.size())
 
 func _on_item_collected(item_key: String):
+	# Play pickup sound
+	if audio_manager:
+		audio_manager.play_item_get()
+	
 	# Increment the candy count
 	if candy_inventory.has(item_key):
 		candy_inventory[item_key] += 1
@@ -98,10 +108,14 @@ func spawn_candy(candy_name: String, position: Vector3):
 		push_warning("Candy scene not found: %s" % candy_name)
 		return
 	
+	# Play drop sound
+	if audio_manager:
+		audio_manager.play_item_drop()
+	
 	var candy_instance = candy_scene.instantiate()
 	
 	# Set position (keep XZ, set Y to 1.5)
-	candy_instance.global_position = Vector3(position.x, SPAWN_Y, position.z)
+	candy_instance.position = Vector3(position.x, SPAWN_Y, position.z)
 	
 	# Set scale to 0.75 on all axes
 	candy_instance.scale = Vector3(SPAWN_SCALE, SPAWN_SCALE, SPAWN_SCALE)

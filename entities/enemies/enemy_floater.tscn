@@ -77,3 +77,4 @@ texture = SubResource("ViewportTexture_sqwww")
 projectile_scene = ExtResource("6_lhmpi")
 fire_rate = 1.0
 projectile_speed = 10.0
+entity_type = "floater"

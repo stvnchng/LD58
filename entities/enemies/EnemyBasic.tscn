@@ -119,6 +119,7 @@ texture = SubResource("ViewportTexture_5lf1o")
 projectile_scene = ExtResource("5_m4lb3")
 fire_rate = 3.0
 projectile_speed = 10.0
+entity_type = "basic"
 
 [node name="Imp" parent="." instance=ExtResource("6_ol7qc")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.0374287, 1.1920929e-07, 2.1142209)
