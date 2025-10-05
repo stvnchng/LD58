@@ -47,6 +47,7 @@ shadow_mesh = SubResource("ArrayMesh_17l24")
 
 [node name="Gum" type="Node3D"]
 script = ExtResource("1_21cgg")
+candy_name = "Gum"
 
 [node name="Area3D" type="Area3D" parent="."]
 

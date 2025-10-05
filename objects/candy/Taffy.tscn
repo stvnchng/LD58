@@ -47,6 +47,7 @@ shadow_mesh = SubResource("ArrayMesh_727xd")
 
 [node name="Taffy" type="Node3D"]
 script = ExtResource("1_rmq3d")
+candy_name = "Taffy"
 
 [node name="Area3D" type="Area3D" parent="."]
 

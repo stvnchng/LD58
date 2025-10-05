@@ -1,0 +1,55 @@
+[gd_scene load_steps=4 format=3 uid="uid://bebuv535qi6ov"]
+
+[ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_4jccu"]
+[ext_resource type="Script" uid="uid://dep58xt0jdumf" path="res://ui/CandyUpgrade.gd" id="1_iapf5"]
+[ext_resource type="PackedScene" uid="uid://ct5iw86xn7g15" path="res://objects/candy/Apple.tscn" id="2_iapf5"]
+
+[node name="CandyUpgrade" type="Panel"]
+custom_minimum_size = Vector2(128, 128)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_4jccu")
+script = ExtResource("1_iapf5")
+
+[node name="Container" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(100, 100)
+layout_mode = 0
+offset_right = 1920.0
+offset_bottom = 100.0
+
+[node name="SubViewport" type="SubViewport" parent="Container"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(128, 128)
+render_target_update_mode = 4
+
+[node name="PreviewNode" type="Node3D" parent="Container/SubViewport"]
+
+[node name="ModelHolder" type="Node3D" parent="Container/SubViewport/PreviewNode"]
+
+[node name="Apple" parent="Container/SubViewport/PreviewNode/ModelHolder" instance=ExtResource("2_iapf5")]
+bob_height = 0.0
+bob_speed = 0.0
+
+[node name="Camera3D" type="Camera3D" parent="Container/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2)
+current = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Container/SubViewport"]
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -42.0
+offset_top = -48.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 48
+text = "x5"

@@ -76,6 +76,7 @@ shadow_mesh = SubResource("ArrayMesh_1as8t")
 
 [node name="Apple" type="Node3D"]
 script = ExtResource("1_3x5qp")
+candy_name = "Apple"
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_wsbio")

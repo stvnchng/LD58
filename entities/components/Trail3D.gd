@@ -38,7 +38,6 @@ func remove_point(i):
 func _process(delta):
 	if (old_pos - global_transform.origin).length() > motion_delta and enabled:
 		append_point()
-		print(_points)
 		old_pos = global_transform.origin
 		
 	var p = 0

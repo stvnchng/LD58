@@ -47,6 +47,7 @@ shadow_mesh = SubResource("ArrayMesh_na3ku")
 
 [node name="Warhead" type="Node3D"]
 script = ExtResource("1_sefye")
+candy_name = "Warhead"
 
 [node name="Area3D" type="Area3D" parent="."]
 

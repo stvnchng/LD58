@@ -1,13 +1,6 @@
 extends Node
 
-# Enemy death signal - emitted when any enemy dies
-# enemy_type: String - "basic", "lurcher", or "floater"
-# death_position: Vector3 - global position where enemy died
-signal enemy_died(enemy_type: String, death_position: Vector3)
 
-# Item collected signal - emitted when player collects an item
-# item_key: String - identifier for the item type (e.g., "APPLE")
-signal item_collected(item_key: String)
 
 # Shoot sound signal - emitted when any entity shoots
 # entity_type: String - "player", "floater", or "basic"

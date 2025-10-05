@@ -105,9 +105,7 @@ shadow_mesh = SubResource("ArrayMesh_om2l5")
 
 [node name="Soda" type="Node3D"]
 script = ExtResource("1_qtkov")
-bob_height = null
-bob_speed = null
-rotation_speed = null
+candy_name = "Soda"
 
 [node name="Area3D" type="Area3D" parent="."]
 

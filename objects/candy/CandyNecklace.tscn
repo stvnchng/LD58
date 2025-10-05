@@ -53,6 +53,7 @@ shadow_mesh = SubResource("ArrayMesh_6fj37")
 
 [node name="CandyNecklace" type="Node3D"]
 script = ExtResource("1_dncgt")
+candy_name = "CandyNecklace"
 
 [node name="Area3D" type="Area3D" parent="."]
 

@@ -202,7 +202,7 @@ func pick_random_target_mode():
 	target_mode = modes[randi() % modes.size()]
 
 func _on_died():
-	Globals.enemy_died.emit("floater", global_position)
+	GameState.enemy_died.emit("floater", global_position)
 	queue_free()
 
 func _on_health_changed(_new_health: int, _max_health: int):

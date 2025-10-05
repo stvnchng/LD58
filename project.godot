@@ -17,6 +17,7 @@ config/features=PackedStringArray("4.5", "GL Compatibility")
 [autoload]
 
 Globals="*res://Globals.gd"
+GameState="*res://GameState.gd"
 
 [display]
 
@@ -26,6 +27,12 @@ window/size/viewport_height=1080
 [editor_plugins]
 
 enabled=PackedStringArray()
+
+[gui]
+
+theme/default_font_hinting=0
+theme/default_font_subpixel_positioning=0
+theme/custom_font="uid://comhghaoeqr4s"
 
 [input]
 

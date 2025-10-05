@@ -1,7 +1,7 @@
 extends Node3D
 class_name Candy
 
-# Bob and rotation parameters
+@export var candy_name: String
 @export var bob_height: float = 0.3
 @export var bob_speed: float = 2.0
 @export var rotation_speed: float = 1.0
@@ -19,16 +19,10 @@ func _ready():
 func _process(delta):
 	time_elapsed += delta
 	
-	# Bob up and down
 	mesh_node.position.y = initial_y + sin(time_elapsed * bob_speed) * bob_height
-	
-	# Rotate around Y axis
 	mesh_node.rotation.y += rotation_speed * delta
 
 func _on_body_entered(body):
-	# Check if it's the player
 	if body is Player:
-		# Emit global signal using this node's name as the item key
-		Globals.item_collected.emit(self.name)
-		# Remove this item from the scene
+		GameState.item_collected.emit(candy_name)
 		queue_free()

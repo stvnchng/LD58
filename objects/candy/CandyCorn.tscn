@@ -104,6 +104,7 @@ shadow_mesh = SubResource("ArrayMesh_emum8")
 
 [node name="CandyCorn" type="Node3D"]
 script = ExtResource("1_gr5sf")
+candy_name = "CandyCorn"
 
 [node name="Area3D" type="Area3D" parent="."]
 

@@ -102,7 +102,7 @@ func end_lurch():
 	pause_timer = lurch_pause
 
 func _on_died():
-	Globals.enemy_died.emit("lurcher", global_position)
+	GameState.enemy_died.emit("lurcher", global_position)
 	queue_free()
 
 func _on_health_changed(_new_health: int, _max_health: int):

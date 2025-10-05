@@ -45,6 +45,7 @@ shadow_mesh = SubResource("ArrayMesh_3c0xd")
 
 [node name="FunDip" type="Node3D"]
 script = ExtResource("1_c5t7n")
+candy_name = "FunDip"
 
 [node name="Area3D" type="Area3D" parent="."]
 
