@@ -1,8 +1,15 @@
 extends CanvasLayer
 
+@export var audio_manager: Node
+
 @onready var timer_lbl: Label = $MarginContainer/VBoxContainer/Timer
 var MAX_PER_ROW := 7
 @onready var upgrade_rows: VBoxContainer = $BottomLeft/UpgradeRows
+@onready var dash_status: Panel = $BottomCenter/Cooldowns/DashStatus
+
+@onready var anim_plyaer: AnimationPlayer = $AnimationPlayer
+@onready var mute_btn: Button = $TopRight/MuteButton
+
 var candy_upgrade_scn := preload("res://ui/CandyUpgrade.tscn")
 var timer_accumulator: float = 0.0
 
@@ -17,6 +24,19 @@ func _ready():
 	enemy_name_to_counter["basic"] = $BottomRight/KillCount/EnemyKillCounter
 	enemy_name_to_counter["lurcher"] = $BottomRight/KillCount/EnemyKillCounter2
 	enemy_name_to_counter["floater"] = $BottomRight/KillCount/EnemyKillCounter3
+	mute_btn.pressed.connect(_on_mute_pressed)
+	_update_mute_icon()
+
+func _on_mute_pressed():
+	audio_manager.toggle_mute()
+	_update_mute_icon()
+
+func _update_mute_icon():
+	var sprite: Sprite2D = mute_btn.get_node("Sprite2D")
+	if audio_manager.muted:
+		sprite.frame = 1
+	else:
+		sprite.frame = 0
 
 func _process(delta: float) -> void:
 	timer_accumulator += delta
