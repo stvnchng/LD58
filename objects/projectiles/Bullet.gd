@@ -34,5 +34,7 @@ func _on_body_entered(body: Node):
 		var health: HealthComponent = body.get_node("HealthComponent")
 		health.take_damage(damage)
 		piercing -= 1
+	if body.has_method("got_taffied") and GameState.get_candy_count("Taffy") > 0:
+		body.got_taffied()
 	if piercing < 0 or body.name == "Player":
 		queue_free()

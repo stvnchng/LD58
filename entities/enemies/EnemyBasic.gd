@@ -14,6 +14,8 @@ var nav_update_interval: float = 0.1
 @onready var health: HealthComponent = $HealthComponent
 @onready var shooting: ShootingComponent = $ShootingComponent
 
+var is_taffied: bool = false
+
 # Targeting modes for more natural pathfinding
 enum TargetMode { PREDICT, CURRENT, PAST }
 
@@ -29,6 +31,16 @@ var next_mode_switch_time: float = 0.0
 var history_size: int = 60          # Max number of samples (1 second at 60 FPS)
 var player_history: Array = []      # Preallocated ring buffer
 var history_index: int = 0          # Current write index
+
+func move_speed() -> float:
+	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
+		return speed
+	return speed * GameState.get_taffy_slow_percent()
+
+func get_wander_speed() -> float:
+	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
+		return wander_speed
+	return wander_speed * GameState.get_taffy_slow_percent()
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -102,22 +114,9 @@ func _physics_process(delta):
 			var target_velocity = Vector3.ZERO
 			if move_dir.length_squared() > 0.0001:
 				move_dir = move_dir.normalized()
-				target_velocity = move_dir * speed
+				target_velocity = move_dir * move_speed()
 			velocity.x = lerp(velocity.x, target_velocity.x, acceleration * delta)
 			velocity.z = lerp(velocity.z, target_velocity.z, acceleration * delta)
-			
-			var viewport = get_viewport()
-			var camera = viewport.get_camera_3d() if viewport else null
-			var on_screen = false
-			
-			if camera:
-				var screen_pos = camera.unproject_position(global_position)
-				on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
-					and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
-
-			if on_screen:
-				shooting.shoot_direction = move_dir
-				shooting.try_shoot()
 
 	else:		
 		if enemy_pos.distance_squared_to(wander_target) < 0.25:
@@ -127,8 +126,23 @@ func _physics_process(delta):
 			wander_dir.y = 0
 			if wander_dir.length_squared() > 0.0001:
 				wander_dir = wander_dir.normalized()
-				velocity.x = lerp(velocity.x, wander_dir.x * wander_speed, acceleration * delta)
-				velocity.z = lerp(velocity.z, wander_dir.z * wander_speed, acceleration * delta)
+				velocity.x = lerp(velocity.x, wander_dir.x * get_wander_speed(), acceleration * delta)
+				velocity.z = lerp(velocity.z, wander_dir.z * get_wander_speed(), acceleration * delta)
+
+	# Shooting logic - works in both chase and wander states
+	var viewport = get_viewport()
+	var camera = viewport.get_camera_3d() if viewport else null
+	var on_screen = false
+	
+	if camera:
+		var screen_pos = camera.unproject_position(global_position)
+		on_screen = screen_pos.x >= 0 and screen_pos.x <= viewport.size.x \
+			and screen_pos.y >= 0 and screen_pos.y <= viewport.size.y
+
+	if on_screen:
+		# Always shoot towards the player
+		shooting.shoot_direction = to_player.normalized()
+		shooting.try_shoot()
 
 	velocity.y = 0
 	move_and_slide()
@@ -172,3 +186,6 @@ func _on_died():
 
 func _on_health_changed(_new_health: int, _max_health: int):
 	pass
+
+func got_taffied():
+	is_taffied = true

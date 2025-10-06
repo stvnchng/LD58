@@ -18,9 +18,19 @@ var lurch_timer: float = 0.0
 var pause_timer: float = 0.0
 var lurch_direction: Vector3 = Vector3.ZERO
 var circle_direction: float = 1.0  # 1 for clockwise, -1 for counter-clockwise
-
+var is_taffied: bool = false
 var nav_update_timer: float = 0.0
 var nav_update_interval: float = 0.1
+
+func get_lurch_speed() -> float:
+	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
+		return lurch_speed
+	return lurch_speed * GameState.get_taffy_slow_percent()
+
+func get_circle_speed() -> float:
+	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
+		return circle_speed
+	return circle_speed * GameState.get_taffy_slow_percent()
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -60,8 +70,8 @@ func _physics_process(delta):
 		if to_player.length_squared() > 0.0001:
 			to_player = to_player.normalized()
 			var tangent = Vector3(-to_player.z, 0, to_player.x) * circle_direction
-			velocity.x = lerp(velocity.x, tangent.x * circle_speed, 5.0 * delta)
-			velocity.z = lerp(velocity.z, tangent.z * circle_speed, 5.0 * delta)
+			velocity.x = lerp(velocity.x, tangent.x * get_circle_speed(), 5.0 * delta)
+			velocity.z = lerp(velocity.z, tangent.z * get_circle_speed(), 5.0 * delta)
 
 			var target_rotation = atan2(to_player.x, to_player.z)
 			rotation.y = lerp_angle(rotation.y, target_rotation, 8.0 * delta)
@@ -80,8 +90,8 @@ func _physics_process(delta):
 				velocity.z = lerp(velocity.z, 0.0, 8.0 * delta)
 		else:
 			lurch_timer -= delta
-			velocity.x = lurch_direction.x * lurch_speed
-			velocity.z = lurch_direction.z * lurch_speed
+			velocity.x = lurch_direction.x * get_lurch_speed()
+			velocity.z = lurch_direction.z * get_lurch_speed()
 			if lurch_direction.length_squared() > 0.0001:
 				rotation.y = lerp_angle(rotation.y, atan2(lurch_direction.x, lurch_direction.z), 8.0 * delta)
 			if lurch_timer <= 0.0:
@@ -107,3 +117,6 @@ func _on_died():
 
 func _on_health_changed(_new_health: int, _max_health: int):
 	pass	
+
+func got_taffied():
+	is_taffied = true

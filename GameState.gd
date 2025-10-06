@@ -26,7 +26,7 @@ func get_jawbreaker_pierce() -> int:
 func get_gum_armor() -> float:
 	return pow(0.95, candy_inventory.get("Gum", 0))
 func get_taffy_slow_percent() -> float:
-	return 1.0 * pow(0.95, candy_inventory.get("Taffy", 0))
+	return pow(0.95, candy_inventory.get("Taffy", 0))
 func get_candy_necklace_cooldown() -> float:
 	return 8.0 * pow(0.95, candy_inventory.get("CandyNecklace", 0))
 func get_fun_dip_max_speed() -> float:

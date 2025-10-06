@@ -19,7 +19,6 @@ func take_damage(amount: int, ignore_invincibility: bool = false):
 	if get_parent() and get_parent().has_method("is_player") and get_parent().is_player():
 		damage = int(amount * GameState.get_gum_armor())
 	
-	print("%s Taking damage:" % damage)
 	current_health = clamp(current_health - damage, 0, max_health)
 	emit_signal("health_changed", current_health, max_health)
 

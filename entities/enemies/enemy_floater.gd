@@ -31,6 +31,12 @@ var history_index: int = 0
 var nav_update_timer: float = 0.0
 var nav_update_interval: float = 0.1
 
+var is_taffied: bool = false
+
+func move_speed() -> float:
+	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
+		return speed
+	return speed * GameState.get_taffy_slow_percent()
 
 func _ready():
 	player = get_tree().get_first_node_in_group("player")
@@ -122,7 +128,7 @@ func approach_player(delta, target_pos: Vector3):
 	
 	# Fluctuating speed - oscillates between 0.4 and 1.0 (never backwards)
 	var speed_multiplier = 0.7 + sin(oscillation_time * 1.2) * 0.3
-	var current_speed = speed * speed_multiplier
+	var current_speed = move_speed() * speed_multiplier
 	
 	var sway_direction = Vector3(-direction.z, 0, direction.x)  # Perpendicular to movement
 	var sway_amount = sin(oscillation_time * 2.0) * 1.5  # Sway side to side
@@ -136,8 +142,8 @@ func retreat_from_player(delta):
 	var direction_away = (global_position - player.global_position).normalized()
 	direction_away.y = 0
 	
-	velocity.x = lerp(velocity.x, direction_away.x * speed, 8.0 * delta)
-	velocity.z = lerp(velocity.z, direction_away.z * speed, 8.0 * delta)
+	velocity.x = lerp(velocity.x, direction_away.x * move_speed(), 8.0 * delta)
+	velocity.z = lerp(velocity.z, direction_away.z * move_speed(), 8.0 * delta)
 
 func orbit_player(delta, distance_to_player):
 	# Calculate tangent direction for orbiting
@@ -166,8 +172,8 @@ func orbit_player(delta, distance_to_player):
 	# Combine tangent (orbit) with natural oscillation and optional correction
 	var desired_direction = (tangent * orbit_speed + radial_velocity + correction).normalized()
 	
-	velocity.x = lerp(velocity.x, desired_direction.x * speed, 2.0 * delta)
-	velocity.z = lerp(velocity.z, desired_direction.z * speed, 2.0 * delta)
+	velocity.x = lerp(velocity.x, desired_direction.x * move_speed(), 2.0 * delta)
+	velocity.z = lerp(velocity.z, desired_direction.z * move_speed(), 2.0 * delta)
 	
 	# Update orbit angle for visual/gameplay variety
 	orbit_angle += orbit_speed * orbit_direction * delta
@@ -207,3 +213,6 @@ func _on_died():
 
 func _on_health_changed(_new_health: int, _max_health: int):
 	pass
+
+func got_taffied():
+	is_taffied = true
