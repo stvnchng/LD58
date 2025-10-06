@@ -1,9 +1,8 @@
-[gd_scene load_steps=14 format=4 uid="uid://wg8ku40r050a"]
+[gd_scene load_steps=13 format=4 uid="uid://wg8ku40r050a"]
 
 [ext_resource type="Script" uid="uid://c2m28fg51cx3w" path="res://entities/enemies/EnemyLurcher.gd" id="2_fsyyr"]
 [ext_resource type="PackedScene" uid="uid://csdi4ym7u24ht" path="res://entities/components/HealthComponent.tscn" id="2_gieha"]
 [ext_resource type="PackedScene" uid="uid://cxlk03l7oen6n" path="res://entities/components/HPBar.tscn" id="3_4w2p5"]
-[ext_resource type="PackedScene" uid="uid://s4cot7k7qoho" path="res://assets/enemy_meshes/zombie.glb" id="4_4w2p5"]
 [ext_resource type="Texture2D" uid="uid://leps1jojxyks" path="res://assets/enemy_meshes/zombie_Image_0.png" id="5_hihvv"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_enemy"]
@@ -82,9 +81,6 @@ mesh = SubResource("BoxMesh_fw1ev")
 [node name="HpBar" parent="." instance=ExtResource("3_4w2p5")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 texture = SubResource("ViewportTexture_5lf1o")
-
-[node name="zombie" parent="." instance=ExtResource("4_4w2p5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6216778, 0, 2.5634513)
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
 transform = Transform3D(1.2, 0, 0, 0, -5.2453668e-08, 1.2, 0, -1.2, -5.2453668e-08, 0, -0.9767224, -0.17550004)

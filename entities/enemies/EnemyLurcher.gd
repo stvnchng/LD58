@@ -7,6 +7,9 @@ class_name EnemyLurcher
 @export var lurch_distance: float = 1.5  # Distance covered per lurch
 @export var circle_radius: float = 1.75  # Distance at which to start circling
 @export var circle_speed: float = 0.3  # Speed when circling player
+@export var contact_damage: int = 5  # Damage dealt on contact
+@export var damage_cooldown: float = 1.0  # Cooldown between damage ticks
+@export var attack_range: float = 2  # Range to check for player in front
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
@@ -29,6 +32,7 @@ var circle_direction: float = 1.0  # 1 for clockwise, -1 for counter-clockwise
 var is_taffied: bool = false
 var nav_update_timer: float = 0.0
 var nav_update_interval: float = 0.1
+var damage_cooldown_timer: float = 0.0
 
 func get_lurch_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
@@ -61,6 +65,10 @@ func set_movement_target(movement_target: Vector3):
 func _physics_process(delta):
 	if not player:
 		return
+
+	# Update damage cooldown
+	if damage_cooldown_timer > 0.0:
+		damage_cooldown_timer -= delta
 
 	var pos = global_position
 	var player_pos = player.global_position
@@ -132,6 +140,45 @@ func _physics_process(delta):
 	
 	velocity.y = 0
 	move_and_slide()
+	
+	# Check for contact damage with player (collision-based)
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		# Check if we hit the player
+		if collider and collider.has_method("is_player") and collider.is_player():
+			# Deal damage if cooldown has expired
+			if damage_cooldown_timer <= 0.0:
+				if collider.has_node("HealthComponent"):
+					var player_health = collider.get_node("HealthComponent")
+					player_health.take_damage(contact_damage)
+					damage_cooldown_timer = damage_cooldown
+	
+	# Check for player in front of lurcher (raycast-based)
+	check_forward_attack()
+
+func check_forward_attack():
+	if damage_cooldown_timer > 0.0 or not player:
+		return
+	
+	# Check if player is within attack range and in front of us
+	var to_player = player.global_position - global_position
+	var distance = to_player.length()
+	
+	# Only attack if player is close enough
+	if distance <= attack_range:
+		# Check if player is generally in front (using dot product)
+		var forward_dir = -global_transform.basis.z  # Forward direction
+		to_player = to_player.normalized()
+		var dot = forward_dir.dot(to_player)
+		
+		# If dot > 0.5, player is within ~60 degrees in front of us
+		if dot > 0.5:
+			if player.has_node("HealthComponent"):
+				var player_health = player.get_node("HealthComponent")
+				player_health.take_damage(contact_damage)
+				damage_cooldown_timer = damage_cooldown
 
 func start_lurch():
 	is_lurching = true
