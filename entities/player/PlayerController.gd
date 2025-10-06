@@ -48,12 +48,12 @@ func dash_speed() -> float:
 
 
 func _ready():
+	GameState.start_timer()
 	health.died.connect(_on_died)
 	health.health_changed.connect(_on_health_changed)
 	GameState.enemy_died.connect(_on_enemy_died)
 	previous_health = health.current_health
 	current_movespeed = move_speed()
-	
 
 	update_necklace_visibility()
 	
@@ -245,6 +245,7 @@ func is_player() -> bool:
 
 func _on_died():
 	if not GameState.game_over:
+		GameState.set_game_over()
 		var game_over_layer = get_tree().get_first_node_in_group("game_over")
 		if game_over_layer:
 			game_over_layer.show_game_over()

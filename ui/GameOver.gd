@@ -14,7 +14,6 @@ func _ready():
 	restart_button.pressed.connect(_on_restart_pressed)
 
 func show_game_over():
-	GameState.game_over = true
 	visible = true
 	layer = 100
 	_populate_labels()
@@ -32,13 +31,13 @@ func _populate_upgrades():
 	_clear_upgrades()
 	var current_row: HBoxContainer = null
 	
-	for candy_name in GameState.candy_inventory.keys():		
+	for candy_name in GameState.candy_inventory.keys():
 		if current_row == null or current_row.get_child_count() >= MAX_PER_ROW:
 			current_row = HBoxContainer.new()
 			current_row.theme = upgrade_rows.theme
 			current_row.add_theme_constant_override("separation", 12)
 			upgrade_rows.add_child(current_row)
-		
+
 		var candy_upgrade: CandyUpgrade = candy_upgrade_scn.instantiate()
 		current_row.add_child(candy_upgrade)
 		candy_upgrade.set_model(candy_name)

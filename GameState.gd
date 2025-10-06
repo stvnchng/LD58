@@ -96,7 +96,6 @@ var kill_counts: Dictionary = {
 
 func _ready():
 	enemy_died.connect(_update_kill_count)
-	start_timer()
 
 func _update_kill_count(enemy_type: String, _death_position: Vector3):
 	kill_counts[enemy_type] += 1
@@ -132,6 +131,10 @@ func get_total_kills() -> int:
 	for count in kill_counts.values():
 		total += count
 	return total
+
+func set_game_over():
+	game_over = true
+	stop_timer()
 
 func restart_game():
 	game_over = false
