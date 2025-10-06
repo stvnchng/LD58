@@ -9,6 +9,7 @@ class_name Player
 @export var footstep_interval: float = 0.35  # Time between footsteps
 @export var walk_animation_speed: float = 3.0  # Speed multiplier for walk animation
 @export var combat_duration: float = 3.0  # Time to stay in combat after shooting
+@export var speed_boost_decay_rate: float = 2.0  # How quickly speed boost decays (higher = faster)
 
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
@@ -30,6 +31,8 @@ var previous_health: int
 var walk_animation_name: String = ""
 var in_combat: bool = false
 
+var current_movespeed: float = 0.0
+
 func move_speed() -> float:
 	if in_combat:
 		return speed * GameState.get_move_speed_multiplier()
@@ -37,12 +40,16 @@ func move_speed() -> float:
 		return speed * GameState.get_move_speed_multiplier() * GameState.get_soda_move_speed()
 
 func dash_speed() -> float:
-	return move_speed() * 4
+	return current_movespeed * 4
+
+
 
 func _ready():
 	health.died.connect(_on_died)
 	health.health_changed.connect(_on_health_changed)
+	GameState.enemy_died.connect(_on_enemy_died)
 	previous_health = health.current_health
+	current_movespeed = move_speed()
 	
 	# Create footstep audio player
 	footstep_player = AudioStreamPlayer.new()
@@ -71,6 +78,12 @@ func _ready():
 	else:
 		print("Error: AnimationPlayer not found!")
 
+func _on_enemy_died(_enemy_type: String, _death_position: Vector3):
+	print("Enemy died, increasing movespeed")
+	# Set to max speed boost, or keep current if already higher
+	var boosted_speed = move_speed() * GameState.get_fun_dip_max_speed()
+	current_movespeed = max(current_movespeed, boosted_speed)
+
 func _physics_process(delta):
 	if dash_timer > 0.0:
 		dash_timer -= delta
@@ -82,6 +95,13 @@ func _physics_process(delta):
 		combat_timer -= delta
 		if combat_timer <= 0.0:
 			in_combat = false
+
+	# Decay speed boost proportionally to excess speed (exponential decay)
+	if current_movespeed > move_speed():
+		var excess_speed = current_movespeed - move_speed()
+		current_movespeed -= excess_speed * speed_boost_decay_rate * delta
+		# Clamp to prevent going below base speed
+		current_movespeed = max(current_movespeed, move_speed())
 
 	var input = Vector3.ZERO
 	if Input.is_action_pressed("move_up"):
@@ -108,8 +128,8 @@ func _physics_process(delta):
 	if dash_timer > 0.0:
 		velocity = dash_direction * dash_speed()
 	else:
-		velocity.x = input.x * move_speed()
-		velocity.z = input.z * move_speed()
+		velocity.x = input.x * current_movespeed
+		velocity.z = input.z * current_movespeed
 		velocity.y = 0
 
 	# Raycast from mouse to ground plane to get target position

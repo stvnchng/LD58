@@ -30,7 +30,7 @@ func get_taffy_slow_percent() -> float:
 func get_candy_necklace_cooldown() -> float:
 	return 8.0 * pow(0.95, candy_inventory.get("CandyNecklace", 0))
 func get_fun_dip_max_speed() -> float:
-	return 1.0 + 0.05 * candy_inventory.get("FunDip", 0)
+	return 1.0 + 0.1 * candy_inventory.get("FunDip", 0)
 func get_soda_move_speed() -> float:
 	return 1.0 + 0.05 * candy_inventory.get("Soda", 0)
 func get_licorice_pull_number() -> int:
