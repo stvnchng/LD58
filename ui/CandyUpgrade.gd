@@ -12,15 +12,13 @@ func _ready():
 	if not tooltip_panel:
 		push_error('hey')
 	$Container/SubViewport.world_3d = World3D.new()
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
 
-func _on_mouse_entered():
-	if description:
+func _process(_delta):
+	var mouse_over = get_global_rect().has_point(get_viewport().get_mouse_position())
+	if mouse_over and description:
 		tooltip_panel.show_tooltip(description)
-
-func _on_mouse_exited():
-	tooltip_panel.hide_tooltip()
+	else:
+		tooltip_panel.hide_tooltip()
 
 func set_model(candy_name: String):
 	for child in model_holder.get_children():
