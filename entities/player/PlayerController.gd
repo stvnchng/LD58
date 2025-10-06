@@ -200,6 +200,7 @@ func _physics_process(delta):
 			if animation_player.is_playing() and animation_player.current_animation == walk_animation_name:
 				animation_player.stop()
 
+
 func start_dash(input: Vector3):
 	if input.length() > 0.1:
 		dash_direction = input.normalized()
@@ -244,14 +245,11 @@ func is_player() -> bool:
 	return true
 
 func _on_died():
-	if not GameState.game_over:
-		var game_over_layer: GameOver = get_tree().get_first_node_in_group("game_over")
-		if game_over_layer:
-			game_over_layer.show_game_over()
-		set_physics_process(false)
-		set_process(false)
+	print('u died bro')
+	queue_free()
 
 func _on_health_changed(new_health: int, _max_health: int):
+	# Emit hurt signal if health decreased
 	if new_health < previous_health:
 		Globals.player_hurt.emit()
 	previous_health = new_health

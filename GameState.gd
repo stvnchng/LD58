@@ -11,7 +11,6 @@ signal item_collected(item_key: String)
 
 var survival_time: float = 0.0
 var timer_running: bool = false
-var game_over = false
 
 func current_difficulty() -> float:
 	return pow(Globals.difficulty_multiplier, survival_time)
@@ -45,6 +44,7 @@ func get_licorice_pull_number() -> int:
 	return 0 + candy_inventory.get("Licorice", 0)
 func get_candy_bar_percent() -> float:
 	return log(candy_inventory.get("CandyBar", 0) + 1) / (2.0 * 2.71828)
+
 
 const candy_name_to_scn: Dictionary[String, PackedScene] = {
 	# Offensive
@@ -111,6 +111,7 @@ func stop_timer() -> void:
 func _process(delta: float) -> void:
 	if timer_running:
 		survival_time += delta
+		
 
 func get_minutes_seconds() -> Array:
 	var minutes = int(survival_time) / 60
@@ -126,16 +127,3 @@ func add_kill(enemy_name: String) -> void:
 
 func get_kills(enemy_name: String) -> int:
 	return kill_counts.get(enemy_name, 0)
-
-func get_total_kills() -> int:
-	var total = 0
-	for count in kill_counts.values():
-		total += count
-	return total
-
-func restart_game():
-	game_over = false
-	candy_inventory.clear()
-	for enemy in kill_counts.keys():
-		kill_counts[enemy] = 0
-	get_tree().reload_current_scene()
