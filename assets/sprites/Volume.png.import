@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://4xcwg8yniwoc"
-path="res://.godot/imported/Volume.png-d98885f2fd518ffe15fc33927284b52c.ctex"
+path="res://.godot/imported/volume.png-32436ec648ff16e5be15046bf0185040.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/Volume.png"
-dest_files=["res://.godot/imported/Volume.png-d98885f2fd518ffe15fc33927284b52c.ctex"]
+source_file="res://assets/sprites/volume.png"
+dest_files=["res://.godot/imported/volume.png-32436ec648ff16e5be15046bf0185040.ctex"]
 
 [params]
 

@@ -16,6 +16,8 @@ var dash_cooldown_timer: float = 0.0
 var dash_direction: Vector3 = Vector3.ZERO
 var footstep_timer: float = 0.0
 var combat_timer: float = 0.0
+var necklace_cooldown_timer: float = 0.0
+var necklace_active: bool = false
 
 @onready var camera_rig = $CameraRig
 @onready var camera = $CameraRig/Camera3D
@@ -23,6 +25,7 @@ var combat_timer: float = 0.0
 @onready var shooting : ShootingComponent = $ShootingComponent
 @onready var dash_trail: Trail3D = $Trail3D
 @onready var animation_player: AnimationPlayer = $wiz/AnimationPlayer
+@onready var candy_necklace: Node3D = $CandyNecklace
 
 var last_mouse_direction: Vector3
 var footstep_sound = preload("res://assets/sounds/footstep.wav")
@@ -50,6 +53,9 @@ func _ready():
 	GameState.enemy_died.connect(_on_enemy_died)
 	previous_health = health.current_health
 	current_movespeed = move_speed()
+	
+
+	update_necklace_visibility()
 	
 	# Create footstep audio player
 	footstep_player = AudioStreamPlayer.new()
@@ -102,6 +108,13 @@ func _physics_process(delta):
 		current_movespeed -= excess_speed * speed_boost_decay_rate * delta
 		# Clamp to prevent going below base speed
 		current_movespeed = max(current_movespeed, move_speed())
+	
+	# Handle candy necklace cooldown
+	if not necklace_active and GameState.get_candy_count("CandyNecklace") > 0:
+		necklace_cooldown_timer -= delta
+		if necklace_cooldown_timer <= 0.0:
+			necklace_active = true
+			update_necklace_visibility()
 
 	var input = Vector3.ZERO
 	if Input.is_action_pressed("move_up"):
@@ -202,7 +215,34 @@ func start_dash(input: Vector3):
 	Globals.player_dash.emit()
 
 func is_invincible() -> bool:
-	return dash_timer > 0.0
+	# Check dash invincibility
+	if dash_timer > 0.0:
+		return true
+	
+	# Check candy necklace shield
+	if necklace_active:
+		# Consume the necklace shield
+		necklace_active = false
+		necklace_cooldown_timer = GameState.get_candy_necklace_cooldown()
+		update_necklace_visibility()
+		print("Candy Necklace blocked damage! Cooldown: %.1f seconds" % necklace_cooldown_timer)
+		return true
+	
+	return false
+
+func update_necklace_visibility():
+	if not candy_necklace:
+		return
+
+	if GameState.get_candy_count("CandyNecklace") == 0:
+		candy_necklace.visible = false
+	
+	if necklace_active:
+		candy_necklace.visible = true
+	else:
+		candy_necklace.visible = false
+	
+
 
 func _on_died():
 	print('u died bro')
