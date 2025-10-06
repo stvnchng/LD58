@@ -138,4 +138,7 @@ func restart_game():
 	candy_inventory.clear()
 	for enemy in kill_counts.keys():
 		kill_counts[enemy] = 0
+	for node in get_tree().root.get_children():
+		if node is Bullet:
+			node.queue_free()
 	get_tree().reload_current_scene()

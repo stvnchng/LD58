@@ -245,7 +245,7 @@ func is_player() -> bool:
 
 func _on_died():
 	if not GameState.game_over:
-		var game_over_layer: GameOver = get_tree().get_first_node_in_group("game_over")
+		var game_over_layer = get_tree().get_first_node_in_group("game_over")
 		if game_over_layer:
 			game_over_layer.show_game_over()
 		set_physics_process(false)

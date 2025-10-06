@@ -1,6 +1,6 @@
-[gd_scene load_steps=4 format=3 uid="uid://bfbmar40fvpqy"]
+[gd_scene load_steps=4 format=3 uid="uid://1pa85jfo1ats"]
 
-[ext_resource type="Script" uid="uid://bwyppmrd8meq1" path="res://ui/GameOver.gd" id="1_vn8e3"]
+[ext_resource type="Script" path="res://ui/GameOver.gd" id="1_vn8e3"]
 [ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_wt74e"]
 [ext_resource type="PackedScene" uid="uid://bebuv535qi6ov" path="res://ui/CandyUpgrade.tscn" id="2_upqj7"]
 
