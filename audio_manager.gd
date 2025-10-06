@@ -116,3 +116,8 @@ func _on_player_hurt():
 # Player dash sound handler
 func _on_player_dash():
 	dash_player.play()
+
+var muted = false
+func toggle_mute():
+	muted = !muted
+	AudioServer.set_bus_mute(AudioServer.get_bus_index("Master"), muted)

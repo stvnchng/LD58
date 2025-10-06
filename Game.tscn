@@ -6,7 +6,7 @@
 [ext_resource type="Script" uid="uid://dvrbekuhi16ys" path="res://candy_manager.gd" id="6_candy"]
 [ext_resource type="PackedScene" uid="uid://bp5f3hmxacaqi" path="res://ui/HUD.tscn" id="6_r0x5m"]
 [ext_resource type="PackedScene" uid="uid://byud17pka3n6r" path="res://map/AtmosphericGhosts.tscn" id="7_3mrqo"]
-[ext_resource type="Script" path="res://audio_manager.gd" id="7_audio"]
+[ext_resource type="Script" uid="uid://djyks241ay1a3" path="res://audio_manager.gd" id="7_audio"]
 
 [sub_resource type="Environment" id="Environment_spooky"]
 background_mode = 1
@@ -399,4 +399,5 @@ script = ExtResource("7_audio")
 
 [node name="Boundaries" type="Node3D" parent="SubViewportContainer/SubViewport/Level"]
 
-[node name="HUD" parent="." instance=ExtResource("6_r0x5m")]
+[node name="HUD" parent="." node_paths=PackedStringArray("audio_manager") instance=ExtResource("6_r0x5m")]
+audio_manager = NodePath("../SubViewportContainer/SubViewport/Level/AudioManager")
