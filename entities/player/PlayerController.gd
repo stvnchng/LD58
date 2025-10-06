@@ -85,7 +85,6 @@ func _ready():
 		print("Error: AnimationPlayer not found!")
 
 func _on_enemy_died(_enemy_type: String, _death_position: Vector3):
-	print("Enemy died, increasing movespeed")
 	# Set to max speed boost, or keep current if already higher
 	var boosted_speed = move_speed() * GameState.get_fun_dip_max_speed()
 	current_movespeed = max(current_movespeed, boosted_speed)

@@ -45,5 +45,5 @@ func _on_body_entered(body: Node):
 	if GameState.get_candy_count("Warhead") > 0 and body.has_method("bleed"):
 		if randf() < GameState.get_warhead_percent():
 			body.bleed()
-	if piercing < 0 or body.name == "Player":
+	if piercing < 0 or body.has_method("is_player"):
 		queue_free()

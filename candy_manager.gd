@@ -4,9 +4,9 @@ class_name CandyManager
 const OFFENSIVE_CANDIES = ["CandyCorn", "Warhead", "PopRock", "RedHot", "Jawbreaker"]
 const DEFENSIVE_CANDIES = ["Gum", "Apple", "Taffy", "CandyNecklace"]
 const MOBILITY_CANDIES = ["PixieStick", "FunDip", "Soda"]
-const UTILITY_CANDIES = ["Licorice", "CandyBar"]
+const UTILITY_CANDIES = ["CandyBar"]
 
-const DROP_CHANCE = 1
+const DROP_CHANCE = 0.2
 const SPAWN_Y = 1.5
 const SPAWN_SCALE = 0.75
 
@@ -40,29 +40,23 @@ func _on_enemy_died(enemy_type: String, death_position: Vector3):
 	if randf() > DROP_CHANCE + GameState.get_candy_bar_percent():
 		return
 	
-	# var candy_name = select_random_candy()
-	var candy_name = "RedHot"
+	var candy_name = select_random_candy()
 	if candy_name == null:
 		return
 	
 	spawn_candy(candy_name, death_position)
 
 func select_random_candy():
-	# Category weights: Offensive 30%, Defensive 30%, Mobility 30%, Utility 10%
 	var roll = randf()
 	var category_candies = []
 	
-	if roll < 0.30:
-		# Offensive (0.0 - 0.30)
+	if roll < 0.32:
 		category_candies = OFFENSIVE_CANDIES
-	elif roll < 0.60:
-		# Defensive (0.30 - 0.60)
+	elif roll < 0.64:
 		category_candies = DEFENSIVE_CANDIES
-	elif roll < 0.90:
-		# Mobility (0.60 - 0.90)
+	elif roll < 0.98:
 		category_candies = MOBILITY_CANDIES
 	else:
-		# Utility (0.90 - 1.0)
 		category_candies = UTILITY_CANDIES
 	
 	if category_candies.is_empty():
