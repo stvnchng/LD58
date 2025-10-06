@@ -42,8 +42,8 @@ var history_index: int = 0          # Current write index
 
 func move_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return speed
-	return speed * GameState.get_taffy_slow_percent()
+		return speed * GameState.current_difficulty()
+	return speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
 
 func get_wander_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
