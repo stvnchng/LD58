@@ -8,6 +8,10 @@ signal died
 signal health_changed(new_health: int, max_health: int)
 
 func _ready():
+	if get_parent() and get_parent().has_method("is_player") and get_parent().is_player():
+		max_health = 100
+	else:
+		max_health = 30
 	current_health = max_health
 
 func take_damage(amount: int, ignore_invincibility: bool = false):

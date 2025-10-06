@@ -44,7 +44,7 @@ func get_soda_move_speed() -> float:
 func get_licorice_pull_number() -> int:
 	return 0 + candy_inventory.get("Licorice", 0)
 func get_candy_bar_percent() -> float:
-	return log(candy_inventory.get("CandyBar", 0) + 1) / (2.0 * 2.71828)
+	return 0.01 * candy_inventory.get("CandyBar", 0)
 
 const candy_name_to_scn: Dictionary[String, PackedScene] = {
 	# Offensive

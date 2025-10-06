@@ -9,9 +9,12 @@ const UTILITY_CANDIES = ["CandyBar"]
 const DROP_CHANCE = 0.2
 const SPAWN_Y = 1.5
 const SPAWN_SCALE = 0.75
+const DROP_COOLDOWN_DURATION = 5.0  # Time for drop chance to recover to full
 
 # Reference to audio manager
 var audio_manager
+# Cooldown timer for candy drops
+var drop_cooldown_timer: float = 0.0
 
 func _ready():
 	# Get reference to audio manager (sibling node)
@@ -19,6 +22,11 @@ func _ready():
 
 	GameState.item_collected.connect(_on_item_collected)
 	GameState.enemy_died.connect(_on_enemy_died)
+
+func _process(delta: float):
+	# Update drop cooldown timer
+	if drop_cooldown_timer > 0.0:
+		drop_cooldown_timer -= delta
 
 func _on_item_collected(item_key: String):
 	if audio_manager:
@@ -31,13 +39,18 @@ func _on_item_collected(item_key: String):
 		if player and player.health:
 			player.health.apple_heal()
 
-func _on_enemy_died(enemy_type: String, death_position: Vector3):
+func _on_enemy_died(_enemy_type: String, death_position: Vector3):
 	# Red Hot explosion
 	if GameState.get_candy_count("RedHot") > 0:
 		trigger_explosion(death_position)
 	
-	# 25% chance to spawn candy
-	if randf() > DROP_CHANCE + GameState.get_candy_bar_percent():
+	# Calculate drop chance based on cooldown
+	# Scales from 0 (when cooldown is full) to full drop chance (when cooldown is 0)
+	var cooldown_multiplier = 1.0 - clamp(drop_cooldown_timer / DROP_COOLDOWN_DURATION, 0.0, 1.0)
+	var current_drop_chance = (DROP_CHANCE + GameState.get_candy_bar_percent()) * cooldown_multiplier
+	
+	# Check if candy should drop
+	if randf() > current_drop_chance:
 		return
 	
 	var candy_name = select_random_candy()
@@ -45,6 +58,9 @@ func _on_enemy_died(enemy_type: String, death_position: Vector3):
 		return
 	
 	spawn_candy(candy_name, death_position)
+	
+	# Reset cooldown timer when candy spawns
+	drop_cooldown_timer = DROP_COOLDOWN_DURATION
 
 func select_random_candy():
 	var roll = randf()
@@ -68,7 +84,6 @@ func trigger_explosion(death_position: Vector3):
 	var explosion_radius = GameState.get_red_hot_radius()
 	var enemies = get_tree().get_nodes_in_group("enemies")
 	
-	var burned_count = 0
 	for enemy in enemies:
 		if not enemy or not is_instance_valid(enemy):
 			continue
@@ -77,7 +92,6 @@ func trigger_explosion(death_position: Vector3):
 		if distance <= explosion_radius:
 			if enemy.has_method("start_burning"):
 				enemy.start_burning()
-				burned_count += 1
 
 func spawn_candy(candy_name: String, position: Vector3):
 	var candy_scene = GameState.candy_name_to_scn.get(candy_name)

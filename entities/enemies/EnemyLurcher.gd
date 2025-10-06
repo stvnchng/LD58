@@ -7,9 +7,9 @@ class_name EnemyLurcher
 @export var lurch_distance: float = 1.5  # Distance covered per lurch
 @export var circle_radius: float = 1.75  # Distance at which to start circling
 @export var circle_speed: float = 0.3  # Speed when circling player
-@export var contact_damage: int = 5  # Damage dealt on contact
+@export var damage: int = 5  # Damage dealt to nearby players
 @export var damage_cooldown: float = 1.0  # Cooldown between damage ticks
-@export var attack_range: float = 2  # Range to check for player in front
+@export var damage_radius: float = 2.0  # Radius to damage players
 
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
@@ -35,14 +35,26 @@ var nav_update_interval: float = 0.1
 var damage_cooldown_timer: float = 0.0
 
 func get_lurch_speed() -> float:
+	# Weighted average: 70% player speed, 30% difficulty
+	# Enemies scale primarily with player speed but difficulty still increases their speed
+	var weighted_value = GameState.get_move_speed_multiplier() * 0.7 + GameState.current_difficulty() * 0.3
+	# Apply logarithmic scaling for diminishing returns and natural cap
+	var speed_multiplier = 1.0 + (log(weighted_value) / log(2.0)/2.0)  # log base 2 for smoother scaling
+	
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return lurch_speed * GameState.current_difficulty()
-	return lurch_speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
+		return lurch_speed * speed_multiplier
+	return lurch_speed * GameState.get_taffy_slow_percent() * speed_multiplier
 
 func get_circle_speed() -> float:
+	# Weighted average: 70% player speed, 30% difficulty
+	# Enemies scale primarily with player speed but difficulty still increases their speed
+	var weighted_value = GameState.get_move_speed_multiplier() * 0.7 + GameState.current_difficulty() * 0.3
+	# Apply logarithmic scaling for diminishing returns and natural cap
+	var speed_multiplier = 1.0 + (log(weighted_value) / log(2.0)/2.0)  # log base 2 for smoother scaling
+	
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return circle_speed * GameState.current_difficulty()
-	return circle_speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
+		return circle_speed * speed_multiplier
+	return circle_speed * GameState.get_taffy_slow_percent() * speed_multiplier
 
 func _ready():
 	add_to_group("enemies")
@@ -141,44 +153,8 @@ func _physics_process(delta):
 	velocity.y = 0
 	move_and_slide()
 	
-	# Check for contact damage with player (collision-based)
-	for i in range(get_slide_collision_count()):
-		var collision = get_slide_collision(i)
-		var collider = collision.get_collider()
-		
-		# Check if we hit the player
-		if collider and collider.has_method("is_player") and collider.is_player():
-			# Deal damage if cooldown has expired
-			if damage_cooldown_timer <= 0.0:
-				if collider.has_node("HealthComponent"):
-					var player_health = collider.get_node("HealthComponent")
-					player_health.take_damage(contact_damage)
-					damage_cooldown_timer = damage_cooldown
-	
-	# Check for player in front of lurcher (raycast-based)
-	check_forward_attack()
-
-func check_forward_attack():
-	if damage_cooldown_timer > 0.0 or not player:
-		return
-	
-	# Check if player is within attack range and in front of us
-	var to_player = player.global_position - global_position
-	var distance = to_player.length()
-	
-	# Only attack if player is close enough
-	if distance <= attack_range:
-		# Check if player is generally in front (using dot product)
-		var forward_dir = -global_transform.basis.z  # Forward direction
-		to_player = to_player.normalized()
-		var dot = forward_dir.dot(to_player)
-		
-		# If dot > 0.5, player is within ~60 degrees in front of us
-		if dot > 0.5:
-			if player.has_node("HealthComponent"):
-				var player_health = player.get_node("HealthComponent")
-				player_health.take_damage(contact_damage)
-				damage_cooldown_timer = damage_cooldown
+	# Check for radius-based damage
+	check_radius_damage()
 
 func start_lurch():
 	is_lurching = true
@@ -190,6 +166,21 @@ func start_lurch():
 func end_lurch():
 	is_lurching = false
 	pause_timer = lurch_pause
+
+func check_radius_damage():
+	# Only damage if cooldown has expired and player exists
+	if damage_cooldown_timer > 0.0 or not player:
+		return
+	
+	# Check if player is within damage radius
+	var distance_to_player = global_position.distance_to(player.global_position)
+	
+	if distance_to_player <= damage_radius:
+		# Deal damage to player
+		if player.has_node("HealthComponent"):
+			var player_health = player.get_node("HealthComponent")
+			player_health.take_damage(damage)
+			damage_cooldown_timer = damage_cooldown
 
 func _on_died():
 	Globals.spawn_death_effect(global_position, get_tree().root)
