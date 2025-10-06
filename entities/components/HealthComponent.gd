@@ -29,6 +29,10 @@ func heal(amount: int):
 	current_health = clamp(current_health + amount, 0, max_health)
 	emit_signal("health_changed", current_health, max_health)
 
+func apple_heal():
+	var heal_amount = int(max_health * GameState.get_apple_healing_percent())
+	heal(heal_amount)
+
 func is_alive() -> bool:
 	return current_health > 0
 
