@@ -10,8 +10,11 @@ class_name Bullet
 var direction: Vector3 = Vector3.FORWARD
 var lifetime_timer: float = 0.0
 
+var piercing: int = 0
+
 func _ready():
 	lifetime_timer = lifetime
+	piercing = GameState.get_jawbreaker_pierce()
 	hitbox.body_entered.connect(_on_body_entered)
 
 func _process(delta):
@@ -30,4 +33,6 @@ func _on_body_entered(body: Node):
 	if body.has_node("HealthComponent"):
 		var health: HealthComponent = body.get_node("HealthComponent")
 		health.take_damage(damage)
-	queue_free()
+		piercing -= 1
+	if piercing < 0 or body.name == "Player":
+		queue_free()

@@ -33,7 +33,7 @@ func _on_enemy_died(enemy_type: String, death_position: Vector3):
 		return
 	
 	# var candy_name = select_random_candy()
-	var candy_name = "PixieStick"
+	var candy_name = "Soda"
 	if candy_name == null:
 		return
 	

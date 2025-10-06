@@ -8,11 +8,13 @@ class_name Player
 @export var dash_cooldown: float = 1.0
 @export var footstep_interval: float = 0.35  # Time between footsteps
 @export var walk_animation_speed: float = 3.0  # Speed multiplier for walk animation
+@export var combat_duration: float = 3.0  # Time to stay in combat after shooting
 
 var dash_timer: float = 0.0
 var dash_cooldown_timer: float = 0.0
 var dash_direction: Vector3 = Vector3.ZERO
 var footstep_timer: float = 0.0
+var combat_timer: float = 0.0
 
 @onready var camera_rig = $CameraRig
 @onready var camera = $CameraRig/Camera3D
@@ -26,9 +28,13 @@ var footstep_sound = preload("res://assets/sounds/footstep.wav")
 var footstep_player: AudioStreamPlayer
 var previous_health: int
 var walk_animation_name: String = ""
+var in_combat: bool = false
 
 func move_speed() -> float:
-	return speed * GameState.get_move_speed_multiplier()
+	if in_combat:
+		return speed * GameState.get_move_speed_multiplier()
+	else:
+		return speed * GameState.get_move_speed_multiplier() * GameState.get_soda_move_speed()
 
 func dash_speed() -> float:
 	return move_speed() * 4
@@ -70,6 +76,12 @@ func _physics_process(delta):
 		dash_timer -= delta
 	if dash_cooldown_timer > 0.0:
 		dash_cooldown_timer -= delta
+	
+	# Handle combat timer
+	if combat_timer > 0.0:
+		combat_timer -= delta
+		if combat_timer <= 0.0:
+			in_combat = false
 
 	var input = Vector3.ZERO
 	if Input.is_action_pressed("move_up"):
@@ -120,6 +132,9 @@ func _physics_process(delta):
 
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		shooting.try_shoot()
+		# Enter combat mode and reset timer
+		in_combat = true
+		combat_timer = combat_duration
 
 	if camera_rig:
 		camera_rig.global_rotation.y = 0
