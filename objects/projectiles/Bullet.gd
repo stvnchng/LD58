@@ -40,10 +40,17 @@ func _on_body_entered(body: Node):
 		var health: HealthComponent = body.get_node("HealthComponent")
 		health.take_damage(get_damage())
 		piercing -= 1
+	
+	# Taffy slow effect
 	if body.has_method("got_taffied") and GameState.get_candy_count("Taffy") > 0:
 		body.got_taffied()
+		Globals.spawn_taffy_effect(body.global_position, get_tree().root)
+	
+	# Warhead bleed effect
 	if GameState.get_candy_count("Warhead") > 0 and body.has_method("bleed"):
 		if randf() < GameState.get_warhead_percent():
 			body.bleed()
+			Globals.spawn_bleed_effect(body.global_position, get_tree().root)
+	
 	if piercing < 0 or body.has_method("is_player"):
 		queue_free()

@@ -12,6 +12,9 @@ signal item_collected(item_key: String)
 var survival_time: float = 0.0
 var timer_running: bool = false
 
+func current_difficulty() -> float:
+	return pow(Globals.difficulty_multiplier, survival_time)
+
 var candy_inventory: Dictionary[String, int] = {}
 func get_attack_speed_multiplier() -> float:
 	return 1.0 + 0.05 * candy_inventory.get("CandyCorn", 0)

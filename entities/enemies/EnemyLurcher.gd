@@ -145,6 +145,7 @@ func end_lurch():
 	pause_timer = lurch_pause
 
 func _on_died():
+	Globals.spawn_death_effect(global_position, get_tree().root)
 	GameState.enemy_died.emit("lurcher", global_position)
 	queue_free()
 

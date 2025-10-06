@@ -241,6 +241,7 @@ func pick_random_target_mode():
 	target_mode = modes[randi() % modes.size()]
 
 func _on_died():
+	Globals.spawn_death_effect(global_position, get_tree().root)
 	GameState.enemy_died.emit("floater", global_position)
 	queue_free()
 

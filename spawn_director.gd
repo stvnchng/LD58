@@ -6,7 +6,9 @@ const ENEMY_DATA = {
 	"floater": {"cost": 15, "weight": 20}
 }
 
-const budget_growth = 3.0
+const budget_growth = 5.0
+func get_budget_growth() -> float:
+	return budget_growth * GameState.current_difficulty()
 
 @export var min_spawn_distance: float = 20.0  # Minimum distance from player
 @export var max_spawn_distance: float = 40.0  # Maximum distance from player
@@ -46,8 +48,8 @@ func _find_navigation_region(node: Node) -> NavigationRegion3D:
 	return null
 
 func _process(delta):
-	spender_budget += budget_growth * delta
-	saver_budget += budget_growth * delta
+	spender_budget += get_budget_growth() * delta
+	saver_budget += get_budget_growth() * delta
 	
 	spawn_check_timer += delta
 	if spawn_check_timer >= SPAWN_CHECK_INTERVAL:
