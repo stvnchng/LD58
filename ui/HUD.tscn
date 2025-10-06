@@ -86,17 +86,14 @@ layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("1_k5de2")
 
-[node name="Label2" type="Label" parent="BottomCenter/Cooldowns/DashStatus"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 80.0
-theme_override_font_sizes/font_size = 64
-text = "dash"
-
 [node name="ProgressBar" type="ProgressBar" parent="BottomCenter/Cooldowns/DashStatus"]
-layout_mode = 0
-offset_right = 4.0
-offset_bottom = 20.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 100.0
 
 [node name="BottomRight" type="MarginContainer" parent="."]
 anchors_preset = 3
@@ -156,7 +153,14 @@ offset_right = 40.0
 offset_bottom = 80.0
 script = ExtResource("6_pfnlp")
 
-[node name="Text" type="Label" parent="UpgradeTooltip"]
+[node name="MarginContainer" type="MarginContainer" parent="UpgradeTooltip"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_right = 12
+
+[node name="Text" type="Label" parent="UpgradeTooltip/MarginContainer"]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
 theme = ExtResource("1_k5de2")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 48
+autowrap_mode = 2
