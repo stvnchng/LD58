@@ -67,22 +67,22 @@ const candy_name_to_scn: Dictionary[String, PackedScene] = {
 const candy_name_to_desc := {
 	# Offensive
 	"CandyCorn": "Increases attack speed by 5% per corn",
-	"Warhead": "Increases dot damage chance by 5% per candy",
+	"Warhead": "Increases burn chance by 5% per candy",
 	"PopRock": "Increases explosion chance by 5% per packet",
-	"RedHot": "Enemies explode on death, applying burn to nearby enemies",
+	"RedHot": "Enemies explode on death, applying burn to nearby enemies. Increases radius by 1m per candy.",
 	"Jawbreaker": "Attacks will hit +1 more enemy per candy.",
 	# Defensive
-	"Gum": "Reduces damage by 10% per roll.",
+	"Gum": "Reduces damage by 5% per roll.",
 	"Apple": "Restores a bit of health.",
-	"Taffy": "Increases chance of slowing enemies by 5% per taffy",
-	"CandyNecklace": "Creates a temporary shield to block the next attack. Reduces cooldown per necklace.",
+	"Taffy": "Reduces enemy speed by 5% per taffy",
+	"CandyNecklace": "Creates a temporary shield to block the next attack. Reduces cooldown by 5% per necklace.",
 	# Mobility
 	"PixieStick": "Increases movement speed by 5% per stick",
-	"FunDip": "Gives a brief speed burst after kills",
+	"FunDip": "Gives a brief speed burst after kills. Increases max speed by 10% per packet.",
 	"Soda": "Increases movement speed by 5% out of combat per can",
 	# Utility
-	"Licorice": "Roots enemies in place.",
-	"CandyBar": "Increases drop rate by 5% per candy bar"
+	"Licorice": "Roots enemies in place. +1 enemy per licorice.",
+	"CandyBar": "Increases drop rate per candy bar"
 }
 
 var kill_counts: Dictionary = {
