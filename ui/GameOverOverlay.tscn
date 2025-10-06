@@ -1,0 +1,77 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfbmar40fvpqy"]
+
+[ext_resource type="Script" uid="uid://bwyppmrd8meq1" path="res://ui/GameOver.gd" id="1_vn8e3"]
+[ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_wt74e"]
+[ext_resource type="PackedScene" uid="uid://bebuv535qi6ov" path="res://ui/CandyUpgrade.tscn" id="2_upqj7"]
+
+[node name="GameOverLayer" type="CanvasLayer"]
+script = ExtResource("1_vn8e3")
+
+[node name="Overlay" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_wt74e")
+color = Color(0, 0, 0, 0.60784316)
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -30.5
+offset_right = 30.5
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_constants/margin_top = 128
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 156
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="EnemiesSlain" type="Label" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Enemies Defeated: 200"
+horizontal_alignment = 1
+
+[node name="Label4" type="Label" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Collected Candies"
+horizontal_alignment = 1
+
+[node name="UpgradeRows" type="VBoxContainer" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Row1" type="HBoxContainer" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme_override_constants/separation = 12
+
+[node name="CandyUpgrade" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
+layout_mode = 2
+
+[node name="CandyUpgrade2" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
+layout_mode = 2
+
+[node name="CandyUpgrade3" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Restart"
