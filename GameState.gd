@@ -17,10 +17,12 @@ func get_attack_speed_multiplier() -> float:
 	return 1.0 + 0.05 * candy_inventory.get("CandyCorn", 0)
 func get_move_speed_multiplier() -> float:
 	return 1.0 + 0.05 * candy_inventory.get("PixieStick", 0)
-func get_red_hot_percent() -> float:
-	return min(1.0, 0.0 + 0.05 * candy_inventory.get("RedHot", 0))
+func get_red_hot_radius() -> float:
+	return 3 + candy_inventory.get("RedHot", 0)
 func get_pop_rock_percent() -> float:
 	return min(1.0, 0.0 + 0.05 * candy_inventory.get("PopRock", 0))
+func get_warhead_percent() -> float:
+	return min(1.0, 0.0 + 0.05 * candy_inventory.get("Warhead", 0))
 func get_jawbreaker_pierce() -> int:
 	return 0 + candy_inventory.get("Jawbreaker", 0)
 func get_gum_armor() -> float:

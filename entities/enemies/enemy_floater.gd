@@ -33,6 +33,13 @@ var nav_update_interval: float = 0.1
 
 var is_taffied: bool = false
 
+var bleeding: bool = false
+var bleeding_timer: float = 0.0
+var bleeding_duration: float = 8.0
+var bleeding_tick_timer: float = 0.0
+var bleeding_interval: float = 1.0
+var bleeding_damage: float = 0.05
+
 func move_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
 		return speed
@@ -86,6 +93,18 @@ func _physics_process(delta):
 		retreat_from_player(delta)
 	else:
 		orbit_player(delta, distance_to_player)
+
+	if bleeding:
+		bleeding_timer -= delta
+		bleeding_tick_timer -= delta
+		
+		if bleeding_timer <= 0.0:
+			bleeding = false
+		
+		# Deal damage once per second
+		if bleeding_tick_timer <= 0.0:
+			health.take_percent_damage(bleeding_damage)
+			bleeding_tick_timer = bleeding_interval
 	
 	# Always rotate to face the player
 	var direction_to_player = (player.global_position - global_position)
@@ -216,3 +235,8 @@ func _on_health_changed(_new_health: int, _max_health: int):
 
 func got_taffied():
 	is_taffied = true
+
+func bleed():
+	bleeding = true
+	bleeding_timer = bleeding_duration
+	bleeding_tick_timer = bleeding_interval  # Start ticking immediately

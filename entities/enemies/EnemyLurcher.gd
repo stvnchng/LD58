@@ -11,6 +11,14 @@ class_name EnemyLurcher
 @onready var navigation_agent: NavigationAgent3D = $NavigationAgent3D
 @onready var health: HealthComponent = $HealthComponent
 
+var bleeding: bool = false
+var bleeding_timer: float = 0.0
+var bleeding_duration: float = 8.0
+
+var bleeding_damage: float = 0.05
+var bleeding_interval: float = 1.0
+var bleeding_tick_timer: float = 0.0
+
 var player: Player = null
 var is_lurching: bool = false
 var is_circling: bool = false
@@ -63,6 +71,18 @@ func _physics_process(delta):
 		is_circling = true
 	elif dist_sq > (circle_radius + 0.5) * (circle_radius + 0.5):
 		is_circling = false
+
+	if bleeding:
+		bleeding_timer -= delta
+		bleeding_tick_timer -= delta
+		
+		if bleeding_timer <= 0.0:
+			bleeding = false
+		
+		# Deal damage once per second
+		if bleeding_tick_timer <= 0.0:
+			health.take_percent_damage(bleeding_damage)
+			bleeding_tick_timer = bleeding_interval
 	
 	if is_circling:
 		var to_player = player_pos - pos
@@ -116,7 +136,12 @@ func _on_died():
 	queue_free()
 
 func _on_health_changed(_new_health: int, _max_health: int):
-	pass	
+	pass
+
+func bleed():
+	bleeding = true
+	bleeding_timer = bleeding_duration
+	bleeding_tick_timer = bleeding_interval  # Start ticking immediately
 
 func got_taffied():
 	is_taffied = true
