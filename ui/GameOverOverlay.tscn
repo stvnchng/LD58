@@ -1,8 +1,7 @@
-[gd_scene load_steps=4 format=3 uid="uid://bfbmar40fvpqy"]
+[gd_scene load_steps=3 format=3 uid="uid://bfbmar40fvpqy"]
 
 [ext_resource type="Script" uid="uid://bwyppmrd8meq1" path="res://ui/GameOver.gd" id="1_vn8e3"]
 [ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_wt74e"]
-[ext_resource type="PackedScene" uid="uid://bebuv535qi6ov" path="res://ui/CandyUpgrade.tscn" id="2_upqj7"]
 
 [node name="GameOverLayer" type="CanvasLayer"]
 script = ExtResource("1_vn8e3")
@@ -61,15 +60,6 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 4
 theme_override_constants/separation = 12
-
-[node name="CandyUpgrade" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
-layout_mode = 2
-
-[node name="CandyUpgrade2" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
-layout_mode = 2
-
-[node name="CandyUpgrade3" parent="Overlay/MarginContainer/VBoxContainer/UpgradeRows/Row1" instance=ExtResource("2_upqj7")]
-layout_mode = 2
 
 [node name="Button" type="Button" parent="Overlay/MarginContainer/VBoxContainer"]
 layout_mode = 2
