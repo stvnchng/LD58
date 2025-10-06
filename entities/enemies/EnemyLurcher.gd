@@ -36,13 +36,13 @@ var damage_cooldown_timer: float = 0.0
 
 func get_lurch_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return lurch_speed
-	return lurch_speed * GameState.get_taffy_slow_percent()
+		return lurch_speed * GameState.current_difficulty()
+	return lurch_speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
 
 func get_circle_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return circle_speed
-	return circle_speed * GameState.get_taffy_slow_percent()
+		return circle_speed * GameState.current_difficulty()
+	return circle_speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
 
 func _ready():
 	add_to_group("enemies")

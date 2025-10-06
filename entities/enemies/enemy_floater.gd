@@ -43,8 +43,8 @@ var burning_tick_timer: float = 0.0
 
 func move_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
-		return speed
-	return speed * GameState.get_taffy_slow_percent()
+		return speed * GameState.current_difficulty()
+	return speed * GameState.get_taffy_slow_percent() * GameState.current_difficulty()
 
 func _ready():
 	add_to_group("enemies")
