@@ -16,6 +16,7 @@ var candy_name_to_upgrade : Dictionary[String, CandyUpgrade] = {}
 var enemy_name_to_counter : Dictionary[String, EnemyCount] = {}
 
 func _ready():
+	visible = true
 	GameState.enemy_died.connect(update_kill_count_label)
 	GameState.item_collected.connect(update_inventory)
 	for child in upgrade_rows.get_children():
@@ -38,6 +39,9 @@ func _update_mute_icon():
 		sprite.frame = 0
 
 func _process(delta: float) -> void:
+	if GameState.game_over:
+		visible = false
+		return
 	timer_accumulator += delta
 	if timer_accumulator >= 1.0:
 		timer_accumulator = 0.0

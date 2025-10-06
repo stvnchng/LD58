@@ -42,6 +42,11 @@ horizontal_alignment = 1
 [node name="MarginContainer" type="MarginContainer" parent="Overlay/MarginContainer/VBoxContainer"]
 layout_mode = 2
 
+[node name="SurvivalTime" type="Label" parent="Overlay/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "You Lasted for 00:00"
+horizontal_alignment = 1
+
 [node name="EnemiesSlain" type="Label" parent="Overlay/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Enemies Defeated: 200"

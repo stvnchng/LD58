@@ -2,6 +2,7 @@ extends CanvasLayer
 class_name GameOver
 
 @onready var overlay: ColorRect = $Overlay
+@onready var survive_time_lbl: Label = $Overlay/MarginContainer/VBoxContainer/SurvivalTime
 @onready var enemies_slain_lbl: Label = $Overlay/MarginContainer/VBoxContainer/EnemiesSlain
 @onready var upgrade_rows: VBoxContainer = $Overlay/MarginContainer/VBoxContainer/UpgradeRows
 @onready var restart_button: Button = $Overlay/MarginContainer/VBoxContainer/Button
@@ -25,6 +26,8 @@ func hide_game_over():
 	_clear_upgrades()
 
 func _populate_labels():
+	var time_arr = GameState.get_minutes_seconds()
+	survive_time_lbl.text = "You lasted for " + "%02d:%02d" % [time_arr[0], time_arr[1]]
 	enemies_slain_lbl.text = "Enemies Defeated: %d" % GameState.get_total_kills()
 
 func _populate_upgrades():
