@@ -242,7 +242,8 @@ func update_necklace_visibility():
 	else:
 		candy_necklace.visible = false
 	
-
+func is_player() -> bool:
+	return true
 
 func _on_died():
 	print('u died bro')

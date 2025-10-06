@@ -14,8 +14,13 @@ func take_damage(amount: int, ignore_invincibility: bool = false):
 	if get_parent() and get_parent().has_method("is_invincible") and not ignore_invincibility:
 		if get_parent().is_invincible():
 			return
+
+	var damage = amount
+	if get_parent() and get_parent().has_method("is_player") and get_parent().is_player():
+		damage = int(amount * GameState.get_gum_armor())
 	
-	current_health = clamp(current_health - amount, 0, max_health)
+	print("%s Taking damage:" % damage)
+	current_health = clamp(current_health - damage, 0, max_health)
 	emit_signal("health_changed", current_health, max_health)
 
 	if current_health <= 0:

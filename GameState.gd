@@ -24,7 +24,7 @@ func get_pop_rock_percent() -> float:
 func get_jawbreaker_pierce() -> int:
 	return 0 + candy_inventory.get("Jawbreaker", 0)
 func get_gum_armor() -> float:
-	return 1.05 * candy_inventory.get("Gum", 0)
+	return pow(0.95, candy_inventory.get("Gum", 0))
 func get_taffy_slow_percent() -> float:
 	return 1.0 * pow(0.95, candy_inventory.get("Taffy", 0))
 func get_candy_necklace_cooldown() -> float:
