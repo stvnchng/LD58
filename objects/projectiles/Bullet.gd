@@ -7,6 +7,12 @@ class_name Bullet
 
 @onready var hitbox: Area3D = $Area3D
 
+func get_damage() -> int:
+	if GameState.get_candy_count("PopRock") > 0:
+		if randf() < GameState.get_pop_rock_percent():
+			return damage * 2
+	return damage
+
 var direction: Vector3 = Vector3.FORWARD
 var lifetime_timer: float = 0.0
 
@@ -32,7 +38,7 @@ func set_direction(new_direction: Vector3, new_speed: float = -1.0):
 func _on_body_entered(body: Node):
 	if body.has_node("HealthComponent"):
 		var health: HealthComponent = body.get_node("HealthComponent")
-		health.take_damage(damage)
+		health.take_damage(get_damage())
 		piercing -= 1
 	if body.has_method("got_taffied") and GameState.get_candy_count("Taffy") > 0:
 		body.got_taffied()
