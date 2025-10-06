@@ -35,10 +35,11 @@ var is_taffied: bool = false
 
 var bleeding: bool = false
 var bleeding_timer: float = 0.0
-var bleeding_duration: float = 8.0
 var bleeding_tick_timer: float = 0.0
-var bleeding_interval: float = 1.0
-var bleeding_damage: float = 0.05
+
+var burning: bool = false
+var burning_timer: float = 0.0
+var burning_tick_timer: float = 0.0
 
 func move_speed() -> float:
 	if GameState.get_candy_count("Taffy") == 0 or not is_taffied:
@@ -46,6 +47,7 @@ func move_speed() -> float:
 	return speed * GameState.get_taffy_slow_percent()
 
 func _ready():
+	add_to_group("enemies")
 	player = get_tree().get_first_node_in_group("player")
 	call_deferred("actor_setup")
 	# Randomize initial orbit direction
@@ -103,8 +105,20 @@ func _physics_process(delta):
 		
 		# Deal damage once per second
 		if bleeding_tick_timer <= 0.0:
-			health.take_percent_damage(bleeding_damage)
-			bleeding_tick_timer = bleeding_interval
+			health.take_percent_damage(Globals.bleeding_damage)
+			bleeding_tick_timer = Globals.bleeding_interval
+	
+	if burning:
+		burning_timer -= delta
+		burning_tick_timer -= delta
+		
+		if burning_timer <= 0.0:
+			burning = false
+		
+		# Deal damage once per second
+		if burning_tick_timer <= 0.0:
+			health.take_percent_damage(Globals.burning_damage)
+			burning_tick_timer = Globals.burning_interval
 	
 	# Always rotate to face the player
 	var direction_to_player = (player.global_position - global_position)
@@ -238,5 +252,10 @@ func got_taffied():
 
 func bleed():
 	bleeding = true
-	bleeding_timer = bleeding_duration
-	bleeding_tick_timer = bleeding_interval  # Start ticking immediately
+	bleeding_timer = Globals.bleeding_duration
+	bleeding_tick_timer = Globals.bleeding_interval
+
+func start_burning():
+	burning = true
+	burning_timer = Globals.burning_duration
+	burning_tick_timer = Globals.burning_interval

@@ -27,18 +27,21 @@ func _on_item_collected(item_key: String):
 		GameState.candy_inventory[item_key] = 0
 	GameState.candy_inventory[item_key] += 1
 	if item_key == "Apple":
-		print("Apple collected")
 		var player = get_tree().get_first_node_in_group("player")
 		if player and player.health:
 			player.health.apple_heal()
 
 func _on_enemy_died(enemy_type: String, death_position: Vector3):
+	# Red Hot explosion
+	if GameState.get_candy_count("RedHot") > 0:
+		trigger_explosion(death_position)
+	
 	# 25% chance to spawn candy
 	if randf() > DROP_CHANCE + GameState.get_candy_bar_percent():
 		return
 	
 	# var candy_name = select_random_candy()
-	var candy_name = "Apple"
+	var candy_name = "RedHot"
 	if candy_name == null:
 		return
 	
@@ -67,6 +70,21 @@ func select_random_candy():
 	
 	return category_candies[randi() % category_candies.size()]
 
+func trigger_explosion(death_position: Vector3):
+	var explosion_radius = GameState.get_red_hot_radius()
+	var enemies = get_tree().get_nodes_in_group("enemies")
+	
+	var burned_count = 0
+	for enemy in enemies:
+		if not enemy or not is_instance_valid(enemy):
+			continue
+		
+		var distance = enemy.global_position.distance_to(death_position)
+		if distance <= explosion_radius:
+			if enemy.has_method("start_burning"):
+				enemy.start_burning()
+				burned_count += 1
+
 func spawn_candy(candy_name: String, position: Vector3):
 	var candy_scene = GameState.candy_name_to_scn.get(candy_name)
 	if candy_scene == null:
@@ -84,4 +102,3 @@ func spawn_candy(candy_name: String, position: Vector3):
 	candy_instance.scale = Vector3(SPAWN_SCALE, SPAWN_SCALE, SPAWN_SCALE)
 	add_child(candy_instance)
 	
-	print("Spawned %s at position %s" % [candy_name, candy_instance.global_position])

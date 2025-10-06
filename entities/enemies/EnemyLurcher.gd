@@ -13,11 +13,11 @@ class_name EnemyLurcher
 
 var bleeding: bool = false
 var bleeding_timer: float = 0.0
-var bleeding_duration: float = 8.0
-
-var bleeding_damage: float = 0.05
-var bleeding_interval: float = 1.0
 var bleeding_tick_timer: float = 0.0
+
+var burning: bool = false
+var burning_timer: float = 0.0
+var burning_tick_timer: float = 0.0
 
 var player: Player = null
 var is_lurching: bool = false
@@ -41,6 +41,7 @@ func get_circle_speed() -> float:
 	return circle_speed * GameState.get_taffy_slow_percent()
 
 func _ready():
+	add_to_group("enemies")
 	player = get_tree().get_first_node_in_group("player")
 	call_deferred("actor_setup")
 	pause_timer = lurch_pause 
@@ -81,8 +82,20 @@ func _physics_process(delta):
 		
 		# Deal damage once per second
 		if bleeding_tick_timer <= 0.0:
-			health.take_percent_damage(bleeding_damage)
-			bleeding_tick_timer = bleeding_interval
+			health.take_percent_damage(Globals.bleeding_damage)
+			bleeding_tick_timer = Globals.bleeding_interval
+	
+	if burning:
+		burning_timer -= delta
+		burning_tick_timer -= delta
+		
+		if burning_timer <= 0.0:
+			burning = false
+		
+		# Deal damage once per second
+		if burning_tick_timer <= 0.0:
+			health.take_percent_damage(Globals.burning_damage)
+			burning_tick_timer = Globals.burning_interval
 	
 	if is_circling:
 		var to_player = player_pos - pos
@@ -140,8 +153,13 @@ func _on_health_changed(_new_health: int, _max_health: int):
 
 func bleed():
 	bleeding = true
-	bleeding_timer = bleeding_duration
-	bleeding_tick_timer = bleeding_interval  # Start ticking immediately
+	bleeding_timer = Globals.bleeding_duration
+	bleeding_tick_timer = Globals.bleeding_interval
+
+func start_burning():
+	burning = true
+	burning_timer = Globals.burning_duration
+	burning_tick_timer = Globals.burning_interval
 
 func got_taffied():
 	is_taffied = true
