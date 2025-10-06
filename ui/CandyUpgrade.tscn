@@ -6,19 +6,18 @@
 
 [node name="CandyUpgrade" type="Panel"]
 custom_minimum_size = Vector2(128, 128)
+size_flags_horizontal = 0
+theme = ExtResource("1_4jccu")
+script = ExtResource("1_iapf5")
+
+[node name="Container" type="SubViewportContainer" parent="."]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("1_4jccu")
-script = ExtResource("1_iapf5")
-
-[node name="Container" type="SubViewportContainer" parent="."]
-custom_minimum_size = Vector2(100, 100)
-layout_mode = 0
-offset_right = 1920.0
-offset_bottom = 100.0
 
 [node name="SubViewport" type="SubViewport" parent="Container"]
 transparent_bg = true
