@@ -64,6 +64,27 @@ const candy_name_to_scn: Dictionary[String, PackedScene] = {
 	"CandyBar": preload("res://objects/candy/CandyBar.tscn")
 }
 
+const candy_name_to_desc := {
+	# Offensive
+	"CandyCorn": "Increases attack speed by 5% per corn",
+	"Warhead": "Increases dot damage chance by 5% per candy",
+	"PopRock": "Increases explosion chance by 5% per packet",
+	"RedHot": "Enemies explode on death, applying burn to nearby enemies",
+	"Jawbreaker": "Attacks will hit +1 more enemy per candy.",
+	# Defensive
+	"Gum": "Reduces damage by 10% per roll.",
+	"Apple": "Restores a bit of health.",
+	"Taffy": "Increases chance of slowing enemies by 5% per taffy",
+	"CandyNecklace": "Creates a temporary shield to block the next attack. Reduces cooldown per necklace.",
+	# Mobility
+	"PixieStick": "Increases movement speed by 5% per stick",
+	"FunDip": "Gives a brief speed burst after kills",
+	"Soda": "Increases movement speed by 5% out of combat per can",
+	# Utility
+	"Licorice": "Roots enemies in place.",
+	"CandyBar": "Increases drop rate by 5% per candy bar"
+}
+
 var kill_counts: Dictionary = {
 	"basic": 0,
 	"lurcher": 0,
