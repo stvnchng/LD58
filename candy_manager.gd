@@ -26,6 +26,11 @@ func _on_item_collected(item_key: String):
 	if not GameState.candy_inventory.has(item_key):
 		GameState.candy_inventory[item_key] = 0
 	GameState.candy_inventory[item_key] += 1
+	if item_key == "Apple":
+		print("Apple collected")
+		var player = get_tree().get_first_node_in_group("player")
+		if player and player.health:
+			player.health.apple_heal()
 
 func _on_enemy_died(enemy_type: String, death_position: Vector3):
 	# 25% chance to spawn candy
@@ -33,7 +38,7 @@ func _on_enemy_died(enemy_type: String, death_position: Vector3):
 		return
 	
 	# var candy_name = select_random_candy()
-	var candy_name = "Soda"
+	var candy_name = "Apple"
 	if candy_name == null:
 		return
 	
