@@ -7,7 +7,6 @@ var MAX_PER_ROW := 7
 @onready var upgrade_rows: VBoxContainer = $BottomLeft/UpgradeRows
 @onready var dash_status: Panel = $BottomCenter/Cooldowns/DashStatus
 
-@onready var anim_plyaer: AnimationPlayer = $AnimationPlayer
 @onready var mute_btn: Button = $TopRight/MuteButton
 
 var candy_upgrade_scn := preload("res://ui/CandyUpgrade.tscn")

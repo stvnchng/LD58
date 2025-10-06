@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=3 uid="uid://bp5f3hmxacaqi"]
+[gd_scene load_steps=7 format=3 uid="uid://bp5f3hmxacaqi"]
 
 [ext_resource type="Script" uid="uid://corft88wkfyta" path="res://ui/hud.gd" id="1_jd13s"]
 [ext_resource type="Theme" uid="uid://blgmxpulkxdyl" path="res://assets/DefaultTheme.tres" id="1_k5de2"]
 [ext_resource type="PackedScene" uid="uid://bebuv535qi6ov" path="res://ui/CandyUpgrade.tscn" id="2_efote"]
 [ext_resource type="PackedScene" uid="uid://bhnkcl7n1i711" path="res://ui/EnemyKillCount.tscn" id="4_wxbmk"]
-[ext_resource type="Texture2D" uid="uid://4xcwg8yniwoc" path="res://assets/sprites/Volume.png" id="5_pom5v"]
+[ext_resource type="Texture2D" uid="uid://4xcwg8yniwoc" path="res://assets/sprites/volume.png" id="5_pom5v"]
+[ext_resource type="Script" uid="uid://cxn4t0gyjn6r1" path="res://ui/upgrade_tooltip.gd" id="6_pfnlp"]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_jd13s")
@@ -149,4 +150,13 @@ texture = ExtResource("5_pom5v")
 centered = false
 hframes = 2
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="UpgradeTooltip" type="PanelContainer" parent="." groups=["tooltip"]]
+visible = false
+offset_right = 40.0
+offset_bottom = 80.0
+script = ExtResource("6_pfnlp")
+
+[node name="Text" type="Label" parent="UpgradeTooltip"]
+layout_mode = 2
+theme = ExtResource("1_k5de2")
+theme_override_font_sizes/font_size = 64

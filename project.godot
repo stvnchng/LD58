@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="New Game Project"
+config/name="LD58"
 run/main_scene="uid://cklphenhukdfx"
 config/features=PackedStringArray("4.5", "GL Compatibility")
 
